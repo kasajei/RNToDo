@@ -1,29 +1,128 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, Image, View } from 'react-native'
-import { Images } from '../Themes'
-
+import {connect} from 'react-redux'
+import SortableListView from 'react-native-sortable-listview'
+import {Button, Input, Icon} from 'react-native-elements'
+import { Images, Colors, Metrics} from '../Themes'
+import Swipeout from 'react-native-swipeout'
+import TodoActions from '../Redux/TodoRedux'
+import { KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
 // Styles
 import styles from './Styles/LaunchScreenStyles'
 
-export default class LaunchScreen extends Component {
+class ToDoCell extends Component {
+  render(){
+    var swipeoutBtns = [
+      {
+        text: 'delete',
+        type:"delete",
+        onPress:() => {
+          this.props.deleteTodo(this.props.index)
+        }
+      }
+    ]
+    return(
+      <Swipeout right={swipeoutBtns} autoClose={true} close={false} style={{backgroundColor:Colors.backgroundColor}}>
+        <View  style={styles.groupBetweenContainer}>
+          <View style={styles.groupAroundContainer}>
+            <Text style={styles.subtitle}>{this.props.index+1}.</Text>
+            <Input
+              returnKeyType="done"
+              inputStyle={{color:Colors.snow}}
+              placeholder={'Task Name Here'}
+              placeholderTextColor={Colors.charcoal} value={this.props.todo.title} 
+              onChangeText={(text) => {
+                this.props.changeTodo(this.props.index, {title:text}) 
+              }}
+            />
+          </View>
+          <Button
+              text=""
+              iconRight
+              icon={<Icon name='bars' type="font-awesome" color={Colors.snow}/>}
+              buttonStyle={{
+                backgroundColor:Colors.transparent
+              }}
+              iconContainerStyle={{
+                marginRight:Metrics.baseMargin,
+                flex:0.1
+              }}
+              {...this.props.sortHandlers}
+              />
+         </View>
+      </Swipeout>
+    )
+  }
+}
+
+class LaunchScreen extends Component {
+  static navigationOptions =  ({ navigation }) => {
+    var title = "役職を確認します"
+    return {
+      title: "RNToDo",
+      headerRight: 
+        <Button 
+          text=""
+          buttonStyle={{
+            backgroundColor:Colors.transparent
+          }}
+          icon={<Icon name='plus' type="font-awesome" color={Colors.fire}/>}
+          onPress={
+            ()=>{navigation.state.params.addTodo({})}
+          }
+        />,
+    }
+  } 
+
+  componentWillMount(){
+    this.props.navigation.setParams({
+      addTodo:this.props.addTodo
+    })
+  }
+  renderFooter(){
+    return(
+      <View style={{marginBottom:240}}/>
+    )
+  }
+
   render () {
     return (
-      <View style={styles.mainContainer}>
-        <Image source={Images.background} style={styles.backgroundImage} resizeMode='stretch' />
-        <ScrollView style={styles.container}>
-          <View style={styles.centered}>
-            <Image source={Images.launch} style={styles.logo} />
-          </View>
-
-          <View style={styles.section} >
-            <Image source={Images.ready} />
-            <Text style={styles.sectionText}>
-              This probably isn't what your app is going to look like. Unless your designer handed you this screen and, in that case, congrats! You're ready to ship. For everyone else, this is where you'll see a live preview of your fully functioning app using Ignite.
-            </Text>
-          </View>
-
-        </ScrollView>
+      <View style={styles.container}>
+        <SortableListView
+          moveOnPressIn = {true}
+          data={this.props.todos}
+          onRowMoved={e => {
+            this.props.changeOrder(e.from, e.to)
+          }}
+          renderRow={(row, section, index) => 
+          <ToDoCell 
+            todo={row} 
+            index={parseInt(index)}
+            changeTodo={this.props.changeTodo}
+            deleteTodo={this.props.deleteTodo}
+            />}
+          renderFooter={this.renderFooter.bind(this)}
+          ListViewComponent={KeyboardAwareListView}
+          extraScrollHeight={44}
+        />
       </View>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state.todo.todos,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTodo: (todo) => dispatch(TodoActions.addTodo(todo)),
+    deleteTodo: (index) => dispatch(TodoActions.deleteTodo(index)),
+    changeTodo: (index, diff) => dispatch(TodoActions.changeTodo(index, diff)),
+    changeOrder: (from, to) => dispatch(TodoActions.changeOrder(from, to)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LaunchScreen)

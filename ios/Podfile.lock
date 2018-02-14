@@ -1,0 +1,56 @@
+PODS:
+  - React (0.53.0):
+    - React/Core (= 0.53.0)
+  - react-native-config (0.11.5):
+    - React
+  - React/BatchedBridge (0.53.0):
+    - React/Core
+    - React/cxxreact_legacy
+  - React/Core (0.53.0):
+    - yoga (= 0.53.0.React)
+  - React/cxxreact_legacy (0.53.0):
+    - React/jschelpers_legacy
+    - React/jsinspector_legacy
+  - React/DevSupport (0.53.0):
+    - React/Core
+    - React/RCTWebSocket
+  - React/fishhook (0.53.0)
+  - React/jschelpers_legacy (0.53.0)
+  - React/jsinspector_legacy (0.53.0)
+  - React/RCTBlob (0.53.0):
+    - React/Core
+  - React/RCTWebSocket (0.53.0):
+    - React/Core
+    - React/fishhook
+    - React/RCTBlob
+  - RNVectorIcons (4.5.0):
+    - React
+  - yoga (0.53.0.React)
+
+DEPENDENCIES:
+  - react-native-config (from `../node_modules/react-native-config`)
+  - React/BatchedBridge (from `../node_modules/react-native`)
+  - React/Core (from `../node_modules/react-native`)
+  - React/DevSupport (from `../node_modules/react-native`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+
+EXTERNAL SOURCES:
+  React:
+    :path: ../node_modules/react-native
+  react-native-config:
+    :path: ../node_modules/react-native-config
+  RNVectorIcons:
+    :path: ../node_modules/react-native-vector-icons
+  yoga:
+    :path: ../node_modules/react-native/ReactCommon/yoga
+
+SPEC CHECKSUMS:
+  React: 988a7dbd5626e0dd4f4b63fb444fa7e3d975e5b7
+  react-native-config: 408003951fd9d8b1dfd7ebf535f67c315f44d823
+  RNVectorIcons: c0dbfbf6068fefa240c37b0f71bd03b45dddac44
+  yoga: 55da126afc384965b96bff46652464373b330add
+
+PODFILE CHECKSUM: 2d59e2d139e4c499801c8de9d465c3602c32499d
+
+COCOAPODS: 1.4.0
