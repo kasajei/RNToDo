@@ -9,6 +9,7 @@ import TodoActions from '../Redux/TodoRedux'
 import { KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
 // Styles
 import styles from './Styles/LaunchScreenStyles'
+import firebase from 'react-native-firebase'
 
 class ToDoCell extends Component {
   render(){
@@ -57,9 +58,9 @@ class ToDoCell extends Component {
 
 class LaunchScreen extends Component {
   static navigationOptions =  ({ navigation }) => {
-    var title = "役職を確認します"
+    var title = "RNToDo"
     return {
-      title: "RNToDo",
+      title: title,
       headerRight: 
         <Button 
           text=""
@@ -68,9 +69,30 @@ class LaunchScreen extends Component {
           }}
           icon={<Icon name='plus' type="font-awesome" color={Colors.fire}/>}
           onPress={
-            ()=>{navigation.state.params.addTodo({})}
+            ()=>{
+              navigation.state.params.addTodo({})
+            }
           }
         />,
+        headerLeft: 
+        <Button 
+          text=""
+          buttonStyle={{
+            backgroundColor:Colors.transparent
+          }}
+          iconRight
+          icon={<Icon name='bars' type="font-awesome" color={Colors.snow}/>}
+          onPress={
+            ()=>{
+              navigation.navigate('DrawerOpen');
+            }
+          }
+        />,
+      drawerLabel: title,
+      drawerIcon: ({ tintColor }) => (
+      <Icon name='home' type="font-awesome" color={tintColor}/>
+      ),
+      drawerLockMode:"unlocked",
     }
   } 
 
@@ -78,6 +100,9 @@ class LaunchScreen extends Component {
     this.props.navigation.setParams({
       addTodo:this.props.addTodo
     })
+    firebase.auth().signInAnonymouslyAndRetrieveData().then((user) => {
+      console.log(user)
+    });
   }
   renderFooter(){
     return(
