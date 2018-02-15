@@ -35,6 +35,7 @@
     "react-native": "0.53.0",
     "react-native-config": "^0.11.5",
     "react-native-elements": "^1.0.0-beta2",
+    "react-native-firebase": "^3.2.5",
     "react-native-keyboard-aware-scroll-view": "^0.4.3",
     "react-native-sortable-listview": "^0.2.8",
     "react-native-swipeout": "^2.3.3",
