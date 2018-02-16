@@ -2,7 +2,7 @@
 
 Simple ToDo apps.
 
-![README](README/app.png)
+[![https://gyazo.com/0ae5f2797aed6df2458d88872c2f8a24](https://i.gyazo.com/0ae5f2797aed6df2458d88872c2f8a24.gif)](https://gyazo.com/0ae5f2797aed6df2458d88872c2f8a24)
 
 * Standard compliant React Native App Utilizing [Ignite](https://github.com/infinitered/ignite)
 

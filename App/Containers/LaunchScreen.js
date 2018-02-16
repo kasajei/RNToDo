@@ -9,7 +9,6 @@ import TodoActions from '../Redux/TodoRedux'
 import { KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
 // Styles
 import styles from './Styles/LaunchScreenStyles'
-import firebase from 'react-native-firebase'
 
 class ToDoCell extends Component {
   render(){
@@ -90,7 +89,7 @@ class LaunchScreen extends Component {
         />,
       drawerLabel: title,
       drawerIcon: ({ tintColor }) => (
-      <Icon name='home' type="font-awesome" color={tintColor}/>
+      <Icon name='check' type="font-awesome" color={tintColor}/>
       ),
       drawerLockMode:"unlocked",
     }
@@ -100,9 +99,6 @@ class LaunchScreen extends Component {
     this.props.navigation.setParams({
       addTodo:this.props.addTodo
     })
-    firebase.auth().signInAnonymouslyAndRetrieveData().then((user) => {
-      console.log(user)
-    });
   }
   renderFooter(){
     return(
