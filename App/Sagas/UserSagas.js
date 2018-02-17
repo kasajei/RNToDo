@@ -44,8 +44,7 @@ export function * updateProfile (action) {
 
 export function * uploadProfilePhoto (action){
   var { user } = action 
-  const stateUser = yield select(UserSelectors.getData)
-
+  const stateUser = yield select(UserSelectors.getUser)
   // upload image
   const storageRef = firebase.storage().ref("profile/icon_"+stateUser.uid)
   const response = yield call([storageRef, storageRef.putFile], user.photoURL)
