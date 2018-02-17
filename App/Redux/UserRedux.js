@@ -4,6 +4,7 @@ import Immutable from 'seamless-immutable'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
+  signInAnonymous:[],
   updateProfile: ['user'],
   uploadProfilePhoto: ['user'],
   userSuccess: ['user'],
@@ -32,6 +33,9 @@ export const UserSelectors = {
 }
 
 /* ------------- Reducers ------------- */
+export const signInAnonymous = (state) =>{
+  return state
+}
 
 export const updateProfile = (state, {user}) =>{
   return state.merge({fetching:true})
@@ -59,6 +63,7 @@ export const userFailure = state =>
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
+  [Types.SIGN_IN_ANONYMOUS]: signInAnonymous,
   [Types.UPDATE_PROFILE]: updateProfile,
   [Types.UPLOAD_PROFILE_PHOTO]: uploadProfilePhoto,
   [Types.USER_SUCCESS]: userSuccess,

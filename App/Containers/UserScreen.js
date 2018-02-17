@@ -34,12 +34,6 @@ class UserScreen extends Component {
     }
   }
 
-  componentWillMount(){
-    firebase.auth().signInAnonymouslyAndRetrieveData().then((data) => {
-      console.log(firebase.auth().currentUser)
-    });
-  }
-
   componentWillReceiveProps(nextProps){
     if(this.props.fetching && !nextProps.fetching){
       Alert.alert(this.props.error?"Error":"Updated")

@@ -17,6 +17,18 @@ import firebase from 'react-native-firebase'
 import { UserSelectors } from '../Redux/UserRedux'
 // import { UserSelectors } from '../Redux/UserRedux'
 
+export function * signInAnonymous (action) {
+  try {
+    const firebaseAuth = firebase.auth()
+    const data= yield call([firebaseAuth, firebaseAuth.signInAnonymouslyAndRetrieveData])
+    const user = firebaseAuth.currentUser
+    yield put(UserActions.userSuccess(user))
+  }catch(error){
+    console.log(error)
+    yield put(UserActions.userFailure())
+  }
+}
+
 export function * updateProfile (action) {
   const { user } = action
   try{
@@ -25,6 +37,7 @@ export function * updateProfile (action) {
     const newUser = firebaseAuth.currentUser
     yield put(UserActions.userSuccess(newUser))
   }catch(error){
+    console.log(error)
     yield put(UserActions.userFailure())
   }
 }
@@ -47,9 +60,11 @@ export function * uploadProfilePhoto (action){
       const newUser = firebaseAuth.currentUser
       yield put(UserActions.userSuccess(newUser))
     }catch(error){
+      console.log(error)
       yield put(UserActions.userFailure())
     }
   }else{
+    console.log(error)
     yield put(UserActions.userFailure())
   }
 }

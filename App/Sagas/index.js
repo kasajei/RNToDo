@@ -9,7 +9,7 @@ import { UserTypes } from '../Redux/UserRedux'
 
 /* ------------- Sagas ------------- */
 
-import {updateProfile, uploadProfilePhoto} from './UserSagas'
+import {updateProfile, uploadProfilePhoto, signInAnonymous} from './UserSagas'
 
 /* ------------- API ------------- */
 
@@ -19,6 +19,7 @@ import {updateProfile, uploadProfilePhoto} from './UserSagas'
 
 export default function * root () {
   yield all([
+    takeLatest(UserTypes.SIGN_IN_ANONYMOUS, signInAnonymous),
     takeLatest(UserTypes.UPDATE_PROFILE, updateProfile),
     takeLatest(UserTypes.UPLOAD_PROFILE_PHOTO, uploadProfilePhoto),
   ])
