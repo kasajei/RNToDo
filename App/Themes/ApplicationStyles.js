@@ -56,6 +56,17 @@ const ApplicationStyles = {
       justifyContent: 'space-between',
       alignItems: 'center'
     },
+    centered:{
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    screenContainer: {
+      height:Metrics.screenHeight - Metrics.navBarHeight, 
+      marginBottom:0,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor:Colors.background
+    },
   },
 }
 

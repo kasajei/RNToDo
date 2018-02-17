@@ -24,10 +24,11 @@ target 'RNToDo' do
   pod 'Firebase/Auth'
   pod 'Firebase/Crash'
   pod 'Firebase/Database'
-  pod 'Firebase/DynamicLinks'
   pod 'Firebase/Messaging'
   pod 'Firebase/RemoteConfig'
   pod 'Firebase/Storage'
+
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
 end
 
