@@ -15,15 +15,21 @@ class RootContainer extends Component {
     return (
       <View style={styles.applicationView}>
         <StatusBar barStyle='light-content' />
-        <ReduxNavigation />
+        {this.props.user && this.props.user.uid && <ReduxNavigation />}
       </View>
     )
   }
 }
 
 // wraps dispatch to create nicer functions to call within our component
+const mapStateToProps = (state) => {
+  return {
+    user:state.user.user,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => ({
   signInAnonymous:()=> dispatch(UserActions.signInAnonymous()),
 })
 
-export default connect(null, mapDispatchToProps)(RootContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(RootContainer)

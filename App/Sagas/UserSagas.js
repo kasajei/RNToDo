@@ -11,7 +11,7 @@
 *************************************************************/
 
 import {Platform} from 'react-native'
-import { call, put, select } from 'redux-saga/effects'
+import { call, put, select, fork } from 'redux-saga/effects'
 import UserActions from '../Redux/UserRedux'
 import firebase from 'react-native-firebase'
 import { UserSelectors } from '../Redux/UserRedux'
@@ -50,19 +50,8 @@ export function * uploadProfilePhoto (action){
   const storageRef = firebase.storage().ref("profile/icon_"+stateUser.uid)
   const response = yield call([storageRef, storageRef.putFile], user.photoURL)
   if (response.state == "success"){
-    try{
-      // update profile
-      const firebaseAuth = yield call(firebase.auth)
-      
-      user = Object.assign(user,{photoURL:response.downloadURL})
-      // user.photoURL = response.donwloadURL
-      yield call([firebaseAuth.currentUser, firebaseAuth.currentUser.updateProfile], user)
-      const newUser = firebaseAuth.currentUser
-      yield put(UserActions.userSuccess(newUser))
-    }catch(error){
-      console.log(error)
-      yield put(UserActions.userFailure())
-    }
+    user = Object.assign(user,{photoURL:response.downloadURL})
+    yield fork(updateProfile, {user:user})
   }else{
     console.log(error)
     yield put(UserActions.userFailure())
