@@ -57,7 +57,7 @@ class ToDoCell extends Component {
 
 class LaunchScreen extends Component {
   static navigationOptions =  ({ navigation }) => {
-    var title = "RNToDo"
+    var title = "DEBUG"
     return {
       title: title,
       headerRight: 
@@ -89,7 +89,7 @@ class LaunchScreen extends Component {
         />,
       drawerLabel: title,
       drawerIcon: ({ tintColor }) => (
-      <Icon name='check' type="font-awesome" color={tintColor}/>
+      <Icon name='bug' type="font-awesome" color={tintColor}/>
       ),
       drawerLockMode:"unlocked",
     }
@@ -109,7 +109,7 @@ class LaunchScreen extends Component {
         text = "add"
         onPress={()=>{
           firebase.firestore().collection('tests').add({
-            userId:this.props.user.uid,
+            userId:"test",
             name: this.props.user.displayName
           }).then((docRef) => {
             console.log(docRef, docRef.id)
@@ -121,7 +121,7 @@ class LaunchScreen extends Component {
         text = "get"
         onPress={()=>{
           firebase.firestore().collection('tests')
-            .where("userId", "==", this.props.user.uid)
+            .where("userId", "==", "test")
             .get()
             .then(querySnapshot=>{
               console.log(querySnapshot)
@@ -137,6 +137,16 @@ class LaunchScreen extends Component {
           firebase.firestore().collection('tests').doc("VMPO7Hm0kyo5pHUo646y").update({
             name: "todo 1"
           }).then((docRef) => {
+            // this is undifined
+            console.log(docRef)
+          })
+        }}
+        />
+        <Button
+        text = "delete"
+        onPress={()=>{
+          firebase.firestore().collection('tests').doc("uVZkaQCdasWdimkH29Wc").delete().then((docRef) => {
+            // this is undifined
             console.log(docRef)
           })
         }}

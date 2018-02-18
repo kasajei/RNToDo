@@ -1,4 +1,6 @@
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
+import TaskScreen from '../Containers/TaskScreen'
+import TodoScreen from '../Containers/TodoScreen'
 import UserScreen from '../Containers/UserScreen'
 import LaunchScreen from '../Containers/LaunchScreen'
 import Colors from '../Themes/Colors'
@@ -10,6 +12,21 @@ const PrimaryNav = StackNavigator({
 }, {
   // Default config for all screens
   initialRouteName: 'LaunchScreen',
+  navigationOptions: {
+    headerStyle: styles.header,
+    headerTintColor: Colors.snow,
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }
+})
+
+const TodoNav = StackNavigator({
+  TaskScreen: { screen: TaskScreen },
+  TodoScreen: { screen: TodoScreen },
+}, {
+  // Default config for all screens
+  initialRouteName: 'TodoScreen',
   navigationOptions: {
     headerStyle: styles.header,
     headerTintColor: Colors.snow,
@@ -35,10 +52,11 @@ const UserNav = StackNavigator({
 
 const MyApp = DrawerNavigator({
   UserNav: { screen: UserNav },
+  TodoNav: {screen: TodoNav},
   PrimaryNav: { screen: PrimaryNav,},
   
 },{
-  initialRouteName: 'PrimaryNav',
+  initialRouteName: 'TodoNav',
   drawerBackgroundColor:Colors.drawer,
   contentOptions: {
     activeTintColor: Colors.background,
