@@ -38,7 +38,7 @@ const MyApp = DrawerNavigator({
   PrimaryNav: { screen: PrimaryNav,},
   
 },{
-  initialRouteName: 'UserNav',
+  initialRouteName: 'PrimaryNav',
   drawerBackgroundColor:Colors.drawer,
   contentOptions: {
     activeTintColor: Colors.background,

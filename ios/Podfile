@@ -27,7 +27,8 @@ target 'RNToDo' do
   pod 'Firebase/Messaging'
   pod 'Firebase/RemoteConfig'
   pod 'Firebase/Storage'
-
+  pod 'Firebase/Firestore'
+  
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
 end

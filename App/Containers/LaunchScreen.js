@@ -7,8 +7,8 @@ import { Images, Colors, Metrics} from '../Themes'
 import Swipeout from 'react-native-swipeout'
 import TodoActions from '../Redux/TodoRedux'
 import { KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
-// Styles
 import styles from './Styles/LaunchScreenStyles'
+import firebase from 'react-native-firebase'
 
 class ToDoCell extends Component {
   render(){
@@ -100,9 +100,72 @@ class LaunchScreen extends Component {
       addTodo:this.props.addTodo
     })
   }
+
   renderFooter(){
     return(
-      <View style={{marginBottom:240}}/>
+      <View>
+      <View style={[styles.groupAroundContainer]}>
+      <Button
+        text = "add"
+        onPress={()=>{
+          firebase.firestore().collection('tests').add({
+            userId:this.props.user.uid,
+            name: this.props.user.displayName
+          }).then((docRef) => {
+            console.log(docRef, docRef.id)
+            console.log(docRef.get().then((doc)=>console.log(doc,doc.data())))
+          })
+        }}
+        />
+        <Button
+        text = "get"
+        onPress={()=>{
+          firebase.firestore().collection('tests')
+            .where("userId", "==", this.props.user.uid)
+            .get()
+            .then(querySnapshot=>{
+              console.log(querySnapshot)
+              querySnapshot.forEach(doc=>{
+                console.log(doc.id, doc.data())
+              })
+            })
+        }}
+        />
+        <Button
+        text = "todo change"
+        onPress={()=>{
+          firebase.firestore().collection('tests').doc("VMPO7Hm0kyo5pHUo646y").update({
+            name: "todo 1"
+          }).then((docRef) => {
+            console.log(docRef)
+          })
+        }}
+        />
+        </View>
+        <View style={[styles.groupAroundContainer]}>
+        <Button
+        text = "task add"
+        onPress={()=>{
+          firebase.firestore().collection('tests').doc("VMPO7Hm0kyo5pHUo646y").collection("tasks").add({
+            name: "task 1"
+          }).then((docRef) => {
+            console.log(docRef)
+          })
+        }}
+        />
+        <Button
+        text = "task get"
+        onPress={()=>{
+          firebase.firestore().collection('tests').doc("VMPO7Hm0kyo5pHUo646y").collection("tasks").get().then((querySnapshot) => {
+            console.log(querySnapshot)
+            querySnapshot.forEach(doc=>{
+              console.log(doc.id, doc.data())
+            })
+          })
+        }}
+        />
+      </View>
+      </View>
     )
   }
 
@@ -134,6 +197,7 @@ class LaunchScreen extends Component {
 const mapStateToProps = (state) => {
   return {
     todos: state.todo.todos,
+    user: state.user.user,
   }
 }
 
