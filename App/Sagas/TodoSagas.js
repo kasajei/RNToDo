@@ -10,7 +10,7 @@
 *    you'll need to define a constant in that file.
 *************************************************************/
 
-import { call, put, select } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 import TodoActions from '../Redux/TodoRedux'
 import { TodoSelectors } from '../Redux/TodoRedux'
 import { UserSelectors } from '../Redux/UserRedux'
@@ -101,4 +101,46 @@ export function * deleteTask (action) {
     .collection(todoCollection).doc(todoId)
     .collection(taskCollection).doc(taskId)
   const result = yield call([doc, doc.delete])
+}
+
+export function *subscribe(collection) {
+  return eventChannel(emit => {
+    const unsubscribe = collection.onSnapshot(snapshot=>{
+      emit(snapshot)
+    })
+    return unsubscribe
+  })  
+}
+
+export function *syncTask (action){
+  const {todoId} = action
+  const collection = firebase.firestore()
+    .collection(todoCollection).doc(todoId)
+    .collection(taskCollection)
+
+  const subscribeTask = eventChannel(emit => {
+      const unsubscribe = collection.onSnapshot(snapshot=>{
+        emit(snapshot)
+      })
+      return unsubscribe
+    }
+  )  
+  try{
+    const snapshot = yield takeEvery(subscribeTask)
+    console.log(snapshot)
+  }finally {
+    if (yield cancelled()) subscribeTask.close()
+  }
+}
+
+export function *startSyncTask (action){
+  const {todoId} = action
+  const subscriber = yield fork(syncTask, action);
+  yield put(TodoActions.addSubscriber, todoId, subscriber)
+}
+
+export function *stopSyncTask (action){
+  const {todoId} = action
+  const subscriber = yield select(TodoSelectors.getSubscriber(todoId))
+  yield cancel(subscriber);
 }

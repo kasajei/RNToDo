@@ -20,6 +20,10 @@ const { Types, Creators } = createActions({
   fetchTask:['todoId','isReload'],
   deleteTask: ['todoId', 'taskId'],
   changeTask:['todoId', 'taskId', 'diff'],
+
+  startSyncTask:['todoId'],
+  addSubscriber:['todoId', 'subscriber'],
+  stopSyncTask:['todoId'],
 })
 
 export const TodoTypes = Types
@@ -33,6 +37,8 @@ export const INITIAL_STATE = Immutable({
   todoLists: {},
   tasks:{},
   fetching: false,
+
+  subscribers:{},
 })
 
 /* ------------- Selectors ------------- */
@@ -40,6 +46,7 @@ export const INITIAL_STATE = Immutable({
 export const TodoSelectors = {
   getTodo: (state, id) => state.todo.todoLists[[id]],
   getTask: (state, taskId) => state.todo.tasks[[taskId]],
+  getSubscriber: (state, todoId) => state.todo.subscribers[[todoId]],
 }
 
 /* ------------- Reducers ------------- */
@@ -118,6 +125,16 @@ export const deleteTask = (state, {todoId, taskId}) =>{
   return state.merge({tasks:newTasks})
 }
 
+export const addSubscriber = (state, {todoId, subscriber}) =>{
+  return state.merge({subscribers:{[todoId]:subscriber}}, {deep:true})
+}
+
+export const stopSyncTask = (state, {todoId}) =>{
+  const {subscribers} = state
+  const newSubscribers = subscribers.without([todoId])
+  return state.merge({subscribers:newSubscribers})
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -133,4 +150,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.FETCH_TASK]: fetchTask,
   [Types.MERGE_TASK]: mergeTask,
   [Types.DELETE_TASK]: deleteTask,
+
+  [Types.ADD_SUBSCRIBER]:addSubscriber,
+  [Types.STOP_SYNC_TASK]:stopSyncTask,
 })
