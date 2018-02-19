@@ -77,7 +77,7 @@ class ShareTaskScreen extends Component {
           icon={<Icon name='plus' type="font-awesome" color={Colors.fire}/>}
           onPress={
             ()=>{
-              navigation.state.params.addTask(params.todoId, {})
+              navigation.state.params.addTask(shareTodoId, {})
             }
           }
         />,

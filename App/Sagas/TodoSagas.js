@@ -11,8 +11,8 @@
 *************************************************************/
 
 import { eventChannel} from 'redux-saga'
-import { take, call, put, select, takeEvery, fork, cancelled, cancel } from 'redux-saga/effects'
-import TodoActions from '../Redux/TodoRedux'
+import { all, take, call, put, select, takeEvery, fork, cancelled, cancel } from 'redux-saga/effects'
+import TodoActions, {TodoTypes} from '../Redux/TodoRedux'
 import { TodoSelectors } from '../Redux/TodoRedux'
 import { UserSelectors } from '../Redux/UserRedux'
 import firebase from 'react-native-firebase'
@@ -130,25 +130,54 @@ export function *syncTask (action){
   try{
     while(true){
       const snapshot = yield take(subscribeAction)
-      console.log("snap",snapshot)
+
+      const mergeTasks = snapshot.docChanges.reduce((pre, change)=>{
+        if (change.type === "added" || change.type === "modified") {
+          pre.push(Object.assign(change.doc.data(),{id:change.doc.id}))
+        }
+        return pre
+      },[])
+      yield put(TodoActions.mergeTask(mergeTasks))
+
+      const deleteTaskIds = snapshot.docChanges.reduce((pre, change)=>{
+        if (change.type === "removed") {
+          pre.push(change.doc.id)
+        }
+        return pre
+      },[])
+      yield all(deleteTaskIds.map(
+        deleteTaskId => put(TodoActions.deleteTask(todoId, deleteTaskId))
+      ));
     }
   }finally {
     if (yield cancelled()) {
-      console.log("キャンセル")
+      console.log("close channel")
       subscribeAction.close()
     }
   }
 }
 
-export function *startSyncTask (action){
-  const { todoId } = action
-  const subscriber = yield fork(syncTask, action);
-  yield put(TodoActions.addSubscriber(todoId, subscriber))
+export function *startSyncTask (subscribers){
+  while(true){
+    const action = yield take(TodoTypes.START_SYNC_TASK)
+    const { todoId } = action
+    const subscriber = yield fork(syncTask, action);
+    subscribers[todoId] = subscriber
+  }
 }
 
-export function *stopSyncTask (action){
-  const {todoId} = action
-  const subscriber = yield select(TodoSelectors.getSubscriber,todoId)
-  console.log("getSubscriber",subscriber)
-  // yield cancel(subscriber);
+export function *stopSyncTask (subscribers){
+  while(true){
+    const action = yield take(TodoTypes.STOP_SYNC_TASK)
+    const {todoId} = action
+    if(subscribers[todoId]){
+      yield cancel(subscribers[todoId]);
+    }
+  }
+}
+
+export function *watchProccess(){
+  let subscribers = {}
+  yield fork(startSyncTask, subscribers)
+  yield fork(stopSyncTask, subscribers)
 }

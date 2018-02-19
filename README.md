@@ -4,6 +4,10 @@ Simple ToDo apps.
 
 [![https://gyazo.com/0ae5f2797aed6df2458d88872c2f8a24](https://i.gyazo.com/0ae5f2797aed6df2458d88872c2f8a24.gif)](https://gyazo.com/0ae5f2797aed6df2458d88872c2f8a24)
 
+**WIP: Sync**
+
+[![https://gyazo.com/893cecdc70bf1afc49fe3c16dc5057bb](https://i.gyazo.com/893cecdc70bf1afc49fe3c16dc5057bb.gif)](https://gyazo.com/893cecdc70bf1afc49fe3c16dc5057bb)
+
 * Standard compliant React Native App Utilizing [Ignite](https://github.com/infinitered/ignite)
 
 ## How to Setup

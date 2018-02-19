@@ -1,4 +1,4 @@
-import { takeEvery, takeLatest, all } from 'redux-saga/effects'
+import { takeEvery, takeLatest, all, fork } from 'redux-saga/effects'
 import API from '../Services/Api'
 import FixtureAPI from '../Services/FixtureApi'
 import DebugConfig from '../Config/DebugConfig'
@@ -13,7 +13,7 @@ import { UserTypes } from '../Redux/UserRedux'
 import {updateProfile, uploadProfilePhoto, signInAnonymous} from './UserSagas'
 import {addTodoList, fetchTodoList, changeTodoList, deleteTodoList} from  './TodoSagas'
 import {addTask, fetchTask, changeTask, deleteTask} from  './TodoSagas'
-import {startSyncTask, stopSyncTask} from './TodoSagas'
+import {startSyncTask, stopSyncTask, watchProccess} from './TodoSagas'
 
 /* ------------- API ------------- */
 
@@ -37,7 +37,6 @@ export default function * root () {
     takeEvery(TodoTypes.CHANGE_TASK, changeTask),
     takeEvery(TodoTypes.DELETE_TASK, deleteTask),
 
-    takeLatest(TodoTypes.START_SYNC_TASK, startSyncTask),
-    takeLatest(TodoTypes.STOP_SYNC_TASK, stopSyncTask),
+    fork(watchProccess),
   ])
 }
