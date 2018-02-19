@@ -46,7 +46,10 @@ export const INITIAL_STATE = Immutable({
 export const TodoSelectors = {
   getTodo: (state, id) => state.todo.todoLists[[id]],
   getTask: (state, taskId) => state.todo.tasks[[taskId]],
-  getSubscriber: (state, todoId) => state.todo.subscribers[[todoId]],
+  getSubscriber: (state, todoId) => {
+    console.log(state.todo, todoId)
+    state.todo.subscribers[[todoId]]
+  },
 }
 
 /* ------------- Reducers ------------- */
@@ -126,13 +129,23 @@ export const deleteTask = (state, {todoId, taskId}) =>{
 }
 
 export const addSubscriber = (state, {todoId, subscriber}) =>{
-  return state.merge({subscribers:{[todoId]:subscriber}}, {deep:true})
+  const {subscribers} = state
+  console.log(todoId, subscriber)
+  const newSubscribers = subscribers.merge({[todoId]:subscriber})
+  // var newSubscribers = Object.assign({},subscribers)
+  // newSubscribers[[todoId]] = subscriber
+  console.log(newSubscribers)
+  state =  state.merge({subscribers:newSubscribers})
+  console.log(state)
+  return state
 }
 
 export const stopSyncTask = (state, {todoId}) =>{
   const {subscribers} = state
-  const newSubscribers = subscribers.without([todoId])
-  return state.merge({subscribers:newSubscribers})
+  console.log(subscribers)
+  // const newSubscribers = subscribers.without([todoId])
+  // return state.merge({subscribers:newSubscribers})
+  return state
 }
 
 /* ------------- Hookup Reducers To Types ------------- */

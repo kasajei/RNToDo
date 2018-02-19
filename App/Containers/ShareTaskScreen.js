@@ -106,7 +106,11 @@ class ShareTaskScreen extends Component {
     this.props.navigation.setParams({
       addTask:this.props.addTask
     })
-    this.props.fetchTask(shareTodoId, true)
+    this.props.startSyncTask(shareTodoId)
+  }
+
+  componentWillUnmount(){
+    this.props.stopSyncTask(shareTodoId)
   }
   render () {
     return (
@@ -154,6 +158,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addTask:(todoId, task)=>dispatch(TodoActions.addTask(todoId, task)),
     fetchTask:(todoId, isReload) => dispatch(TodoActions.fetchTask(todoId, isReload)),
+    startSyncTask: (todoId) => dispatch(TodoActions.startSyncTask(todoId)),
+    stopSyncTask : (todoId) => dispatch(TodoActions.stopSyncTask(todoId)),
     changeTask:(todoId, taskId, diff) => dispatch(TodoActions.changeTask(todoId, taskId, diff)),
     deleteTask:(todoId, taskId) => dispatch(TodoActions.deleteTask(todoId, taskId)),
   }

@@ -81,7 +81,7 @@ class UserScreen extends Component {
         <Button
           text= "Not feching"
           loading={this.props.fetching}
-        />
+          />
         </KeyboardAvoidingView>
       </ScrollView>
     )
