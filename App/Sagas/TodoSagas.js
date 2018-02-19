@@ -16,12 +16,13 @@ import { TodoSelectors } from '../Redux/TodoRedux'
 import { UserSelectors } from '../Redux/UserRedux'
 import firebase from 'react-native-firebase'
 
-const collectionName = "test"
+const todoCollection = "test"
+const taskCollection = 'task'
 
 export function * addTodoList (action) {
   const { todo } = action
   const user = yield select(UserSelectors.getUser)
-  const collection = firebase.firestore().collection(collectionName)
+  const collection = firebase.firestore().collection(todoCollection)
   const docRef = yield call([collection, collection.add], {
     userId: user.uid,
   })
@@ -32,7 +33,7 @@ export function * addTodoList (action) {
 
 export function * fetchTodoList (action){
   const user = yield select(UserSelectors.getUser)
-  const collection = firebase.firestore().collection(collectionName).where("userId", "==", user.uid)
+  const collection = firebase.firestore().collection(todoCollection).where("userId", "==", user.uid)
   const querySnap = yield call([collection, collection.get])
   const todoList = querySnap.docs.map(doc=>{
     return Object.assign(doc.data(),{id:doc.id})
@@ -43,7 +44,7 @@ export function * fetchTodoList (action){
 export function * changeTodoList (action){
   const {id, diff} = action
   const todo = yield select(TodoSelectors.getTodo, id)
-  const doc = firebase.firestore().collection(collectionName).doc(id)
+  const doc = firebase.firestore().collection(todoCollection).doc(id)
   // update return undefined
   yield call([doc, doc.update], diff)
   const changedTodo = todo.merge(diff)
@@ -52,7 +53,7 @@ export function * changeTodoList (action){
 
 export function * deleteTodoList (action){
   const {id} = action
-  const doc = firebase.firestore().collection(collectionName).doc(id)
+  const doc = firebase.firestore().collection(todoCollection).doc(id)
   const result = yield call([doc, doc.delete])
 }
 
@@ -62,7 +63,7 @@ export function * addTask (action){
   console.log(todoId, task)
   const user = yield select(UserSelectors.getUser)
   const collection = firebase.firestore()
-    .collection(collectionName).doc(todoId).collection('tasks')
+    .collection(todoCollection).doc(todoId).collection(taskCollection)
   const docRef = yield call([collection, collection.add], Object.assign(task,{
     userId: user.uid,
   }))
@@ -74,10 +75,30 @@ export function * addTask (action){
 export function * fetchTask (action){
   const {todoId} = action
   const collection = firebase.firestore()
-    .collection(collectionName).doc(todoId).collection('tasks')
+    .collection(todoCollection).doc(todoId).collection(taskCollection)
   const querySnap = yield call([collection, collection.get])
   const tasks = querySnap.docs.map(doc=>{
     return Object.assign(doc.data(),{id:doc.id})
   })
   yield put(TodoActions.mergeTask(tasks))
+}
+
+export function * changeTask (action){
+  const {todoId, taskId, diff} = action
+  const task = yield select(TodoSelectors.getTask, taskId)
+  const doc = firebase.firestore()
+    .collection(todoCollection).doc(todoId)
+    .collection(taskCollection).doc(taskId)
+  // update return undefined
+  yield call([doc, doc.update], diff)
+  const changedTask = task.merge(diff)
+  yield put(TodoActions.mergeTask([changedTask]))
+}
+
+export function * deleteTask (action) {
+  const {todoId, taskId} = action
+  const doc = firebase.firestore()
+    .collection(todoCollection).doc(todoId)
+    .collection(taskCollection).doc(taskId)
+  const result = yield call([doc, doc.delete])
 }

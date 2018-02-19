@@ -92,7 +92,7 @@ class TodoScreen extends Component {
         />,
       drawerLabel: title,
       drawerIcon: ({ tintColor }) => (
-      <Icon name='check' type="font-awesome" color={tintColor}/>
+      <Icon name='cloud' type="font-awesome" color={tintColor}/>
       ),
       drawerLockMode:"unlocked",
     }

@@ -19,7 +19,7 @@ class TaskCell extends Component {
         text: 'delete',
         type:"delete",
         onPress:() => {
-          this.props.deleteTodoList(this.props.id)
+          this.props.deleteTask(this.props.todoId, this.props.taskId)
         }
       }
     ]
@@ -32,11 +32,11 @@ class TaskCell extends Component {
               inputStyle={{color:Colors.snow}}
               placeholder={'Task Name'}
               placeholderTextColor={Colors.charcoal} 
-              defaultValue={this.props.todo.title} 
+              defaultValue={this.props.task.title} 
               onSubmitEditing={(event) => {
                 const text = event.nativeEvent.text
-                if (this.props.todo.title != text){
-                  this.props.changeTodoList(this.props.id, {title:text}) 
+                if (this.props.task.title != text){
+                  this.props.changeTask(this.props.todoId, this.props.taskId, {title:text}) 
                 }
               }}
             />
@@ -99,10 +99,11 @@ class TaskScreen extends Component {
           renderRow={(row, section, index) => {
             return (
               <TaskCell 
-                todo={row} 
-                id={index}
-                // changeTodoList={this.props.changeTodoList}
-                // deleteTodoList={this.props.deleteTodoList}
+                task={row} 
+                todoId={this.props.navigation.state.params.todoId}
+                taskId={index}
+                changeTask={this.props.changeTask}
+                deleteTask={this.props.deleteTask}
               />
             )}}
           // renderFooter={this.renderFooter.bind(this)}
@@ -132,6 +133,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addTask:(todoId, task)=>dispatch(TodoActions.addTask(todoId, task)),
     fetchTask:(todoId, isReload) => dispatch(TodoActions.fetchTask(todoId, isReload)),
+    changeTask:(todoId, taskId, diff) => dispatch(TodoActions.changeTask(todoId, taskId, diff)),
+    deleteTask:(todoId, taskId) => dispatch(TodoActions.deleteTask(todoId, taskId)),
   }
 }
 

@@ -12,7 +12,7 @@ import { UserTypes } from '../Redux/UserRedux'
 
 import {updateProfile, uploadProfilePhoto, signInAnonymous} from './UserSagas'
 import {addTodoList, fetchTodoList, changeTodoList, deleteTodoList} from  './TodoSagas'
-import {addTask, fetchTask} from  './TodoSagas'
+import {addTask, fetchTask, changeTask, deleteTask} from  './TodoSagas'
 
 /* ------------- API ------------- */
 
@@ -33,5 +33,7 @@ export default function * root () {
 
     takeLatest(TodoTypes.ADD_TASK, addTask),
     takeLatest(TodoTypes.FETCH_TASK, fetchTask),
+    takeEvery(TodoTypes.CHANGE_TASK, changeTask),
+    takeEvery(TodoTypes.DELETE_TASK, deleteTask),
   ])
 }

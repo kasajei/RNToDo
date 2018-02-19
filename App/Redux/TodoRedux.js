@@ -38,7 +38,8 @@ export const INITIAL_STATE = Immutable({
 /* ------------- Selectors ------------- */
 
 export const TodoSelectors = {
-  getTodo: (state, id) => state.todo.todoLists[[id]]
+  getTodo: (state, id) => state.todo.todoLists[[id]],
+  getTask: (state, taskId) => state.todo.tasks[[taskId]],
 }
 
 /* ------------- Reducers ------------- */
