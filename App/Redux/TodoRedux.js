@@ -14,6 +14,12 @@ const { Types, Creators } = createActions({
   fetchTodoList: [],
   deleteTodoList: ['id'],
   changeTodoList: ['id', 'diff'],
+
+  addTask:['todoId', 'task'],
+  mergeTask: ['tasks'],
+  fetchTask:['todoId','isReload'],
+  deleteTask: ['todoId', 'taskId'],
+  changeTask:['todoId', 'taskId', 'diff'],
 })
 
 export const TodoTypes = Types
@@ -23,7 +29,9 @@ export default Creators
 
 export const INITIAL_STATE = Immutable({
   todos:[{}], // [{title:"first task"},{title:"second task"}]
+
   todoLists: {},
+  tasks:{},
   fetching: false,
 })
 
@@ -81,7 +89,6 @@ export const mergeTodoList = (state, {todos}) =>{
     pre[value.id] = value
     return pre
   }, {})
-  console.log(todoLists)
   return state.merge({todoLists:todoLists, fetching:false},{deep: true})
 }
 
@@ -89,6 +96,25 @@ export const deleteTodoList = (state, {id}) =>{
   const {todoLists} = state
   const newTodoLists = todoLists.without([id])
   return state.merge({todoLists:newTodoLists})
+}
+
+export const fetchTask = (state, {isReload}) =>{
+  if (isReload) state = state.merge({tasks:{}})
+  return state.merge({fetching:true})
+}
+
+export const mergeTask = (state, {tasks}) =>{
+  const taskList = tasks.reduce((pre, value)=>{
+    pre[value.id] = value
+    return pre
+  }, {})
+  return state.merge({tasks:taskList, fetching:false},{deep: true})
+}
+
+export const deleteTask = (state, {todoId, taskId}) =>{
+  const {tasks} = state
+  const newTasks = tasks.without([taskId])
+  return state.merge({tasks:newTasks})
 }
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -102,4 +128,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.FETCH_TODO_LIST]:fetchTodoList,
   [Types.MERGE_TODO_LIST]: mergeTodoList,
   [Types.DELETE_TODO_LIST]: deleteTodoList,
+
+  [Types.FETCH_TASK]: fetchTask,
+  [Types.MERGE_TASK]: mergeTask,
+  [Types.DELETE_TASK]: deleteTask,
 })

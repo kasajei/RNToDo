@@ -50,6 +50,7 @@ class ToDoCell extends Component {
                 marginRight:Metrics.baseMargin,
                 flex:0.1
               }}
+              onPress={()=>{this.props.goToTaskScreen(this.props.id, this.props.todo)}}
               />
          </View>
       </Swipeout>
@@ -104,6 +105,10 @@ class TodoScreen extends Component {
     this.props.fetchTodoList()
   }
 
+  goToTaskScreen(id, todo){
+    this.props.navigation.navigate("TaskScreen", {todoId:id, todo:todo})
+  }
+
   
   render () {
     return (
@@ -121,6 +126,7 @@ class TodoScreen extends Component {
                 id={index}
                 changeTodoList={this.props.changeTodoList}
                 deleteTodoList={this.props.deleteTodoList}
+                goToTaskScreen={this.goToTaskScreen.bind(this)}
               />
             )}}
           // renderFooter={this.renderFooter.bind(this)}
