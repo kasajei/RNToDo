@@ -81,7 +81,7 @@ class UserScreen extends Component {
               }}
             />       
         <Button
-          text= "TwitterLogin"
+          text= "Twitter SignUp"
           loading={this.props.fetching}
           onPress={()=>{
             twitter({
@@ -113,6 +113,39 @@ class UserScreen extends Component {
               // error.description
             });
           }}
+          />
+          <Button 
+            text="Twitter Login"
+            onPress={()=>{
+              twitter({
+                appId: Config.TWITTER_CONSUMER_KEY,
+                appSecret: Config.TWITTER_CONSUMER_SECRET,
+                callback:"RNTodo://authorize"
+              }).then((info) => {
+                console.log(info)
+                // info.user - user details from the provider
+                // info.credentials - tokens from the provider
+  
+                // create a new firebase credential with the token
+                const credential = firebase.auth.TwitterAuthProvider.credential(
+                  info.credentials.oauth_token,
+                  info.credentials.oauth_token_secret
+                );
+                // login with credential
+                // const currentUser = await firebase.auth().signInWithCredential(credential);
+  
+                // link to current user
+                firebase.auth().signInAndRetrieveDataWithCredential(credential).then((data)=>{
+                  console.log(data)
+                }).catch((error)=>{
+                  console.log(error)
+                })
+              }).catch((error) => {
+                console.log(error)
+                // error.code
+                // error.description
+              });
+            }}
           />
           <Button 
             text="Twitter Unlink"
