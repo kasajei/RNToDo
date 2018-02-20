@@ -35,6 +35,7 @@ export const INITIAL_STATE = Immutable({
 
   todoLists: {},
   tasks:{},
+  taskIds:[],
   fetching: false,
 })
 
@@ -103,22 +104,50 @@ export const deleteTodoList = (state, {id}) =>{
 }
 
 export const fetchTask = (state, {isReload}) =>{
-  if (isReload) state = state.merge({tasks:{}})
+  if (isReload) state = state.merge({tasks:{}, taskIds:[]})
   return state.merge({fetching:true})
 }
 
+const orderdTask = (tasks) =>{
+  tasks =  Object.keys(tasks).reduce((pre, value, index)=>{
+    pre[value] = tasks[value].order? tasks[value]: tasks[value].merge({order:(index*10+1)})
+    return pre
+  },{})
+  const taskIds = Object.keys(tasks).sort((a,b)=>{
+    if(tasks[a].order < tasks[b].order ) return -1
+    if(tasks[a].order > tasks[b].order ) return 1
+    return 0
+  })
+  return [tasks, taskIds]
+}
+
+export const changeTask = (state, {todoId, taskId, diff})=>{
+  const {tasks} = state
+  newTasks = tasks.merge({[taskId]:diff}, {deep: true})
+  var [newTasks, taskIds] = orderdTask(newTasks)
+  return state.merge({tasks:newTasks, taskIds})
+}
+
 export const mergeTask = (state, {tasks}) =>{
+  const beforeTasks = state.tasks
   const taskList = tasks.reduce((pre, value)=>{
     pre[value.id] = value
     return pre
   }, {})
-  return state.merge({tasks:taskList, fetching:false},{deep: true})
+  var newTasks = beforeTasks.merge(taskList, {deep: true})
+  var [newTasks, taskIds] = orderdTask(newTasks)
+  return state.merge({tasks:newTasks, fetching:false, taskIds},{deep: true})
 }
 
 export const deleteTask = (state, {todoId, taskId}) =>{
-  const {tasks} = state
+  const {tasks, taskIds} = state
+  const newTaskIds = taskIds.filter((value) => value!=taskId)
   const newTasks = tasks.without([taskId])
-  return state.merge({tasks:newTasks})
+  return state.merge({tasks:newTasks, taskIds:newTaskIds})
+}
+
+export const startSyncTask = (state, {todoId}) =>{
+  return state.merge({tasks:{}, taskIds:[]})
 }
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -134,6 +163,9 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DELETE_TODO_LIST]: deleteTodoList,
 
   [Types.FETCH_TASK]: fetchTask,
+  [Types.CHANGE_TASK]: changeTask,
   [Types.MERGE_TASK]: mergeTask,
   [Types.DELETE_TASK]: deleteTask,
+
+  [Types.START_SYNC_TASK]:startSyncTask,
 })

@@ -52,7 +52,7 @@ class TaskCell extends Component {
                 marginRight:Metrics.baseMargin,
                 flex:0.1
               }}
-              // onPress={()=>{this.props.goToTaskScreen(this.props.id, this.props.todo)}}
+              {...this.props.sortHandlers}
               />
          </View>
       </Swipeout>
@@ -91,11 +91,30 @@ class TaskScreen extends Component {
     return (
       <View style={styles.container}>
         <SortableListView
-          // moveOnPressIn = {true}
-          data={this.props.tasks?this.props.tasks:{}}
-          // onRowMoved={e => {
-          //   this.props.changeOrder(e.from, e.to)
-          // }}
+          moveOnPressIn = {true}
+          data={this.props.tasks}
+          order={this.props.taskIds}
+          onRowMoved={e => {
+            if(e.to == 0){ // firest
+              this.props.changeTask(
+                this.props.navigation.state.params.todoId,
+                this.props.taskIds[e.from],
+                {order: this.props.tasks[this.props.taskIds[0]].order/2}  
+              )
+            }else if (e.to == this.props.taskIds.length -1){ // last
+              this.props.changeTask(
+                this.props.navigation.state.params.todoId,
+                this.props.taskIds[e.from],
+                {order: this.props.tasks[this.props.taskIds[e.to]].order+1}  
+              )
+            }else{
+              this.props.changeTask(
+                this.props.navigation.state.params.todoId,
+                this.props.taskIds[e.from],
+                {order: (this.props.tasks[this.props.taskIds[(e.to>e.from)?(e.to+1):(e.to-1)]].order+this.props.tasks[this.props.taskIds[e.to]].order)/2}  
+              )
+            }
+          }}
           renderRow={(row, section, index) => {
             return (
               <TaskCell 
@@ -124,6 +143,7 @@ class TaskScreen extends Component {
 const mapStateToProps = (state) => {
   return {
     tasks: state.todo.tasks,
+    taskIds: state.todo.taskIds,
     fetching: state.todo.fetching,
     user: state.user.user,
   }

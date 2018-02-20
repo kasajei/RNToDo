@@ -71,7 +71,7 @@ const MyApp = DrawerNavigator({
   ShareNav: {screen:ShareNav},
   PrimaryNav: { screen: PrimaryNav,},
 },{
-  initialRouteName: 'UserNav',
+  initialRouteName: 'TodoNav',
   drawerBackgroundColor:Colors.drawer,
   contentOptions: {
     activeTintColor: Colors.background,
