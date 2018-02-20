@@ -40,6 +40,7 @@
     "react-native-firebase": "^3.2.5",
     "react-native-image-picker": "^0.26.7",
     "react-native-keyboard-aware-scroll-view": "^0.4.3",
+    "react-native-simple-auth": "^2.3.0",
     "react-native-sortable-listview": "^0.2.8",
     "react-native-swipeout": "^2.3.3",
     "react-native-vector-icons": "^4.5.0",

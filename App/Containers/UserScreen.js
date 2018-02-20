@@ -7,6 +7,8 @@ import firebase from 'react-native-firebase'
 import styles from './Styles/UserScreenStyle'
 import UserActions from '../Redux/UserRedux'
 import ImagePicker from 'react-native-image-picker'
+import Config from 'react-native-config'
+import { twitter } from 'react-native-simple-auth'
 
 class UserScreen extends Component {
   static navigationOptions =  ({ navigation }) => {
@@ -79,8 +81,49 @@ class UserScreen extends Component {
               }}
             />       
         <Button
-          text= "Not feching"
+          text= "TwitterLogin"
           loading={this.props.fetching}
+          onPress={()=>{
+            twitter({
+              appId: Config.TWITTER_CONSUMER_KEY,
+              appSecret: Config.TWITTER_CONSUMER_SECRET,
+              callback:"RNTodo://authorize"
+            }).then((info) => {
+              console.log(info)
+              // info.user - user details from the provider
+              // info.credentials - tokens from the provider
+
+              // create a new firebase credential with the token
+              const credential = firebase.auth.TwitterAuthProvider.credential(
+                info.credentials.oauth_token,
+                info.credentials.oauth_token_secret
+              );
+              // login with credential
+              // const currentUser = await firebase.auth().signInWithCredential(credential);
+
+              // link to current user
+              firebase.auth().currentUser.linkWithCredential(credential).then(function(user) {
+                console.log("Anonymous account successfully upgraded", user);
+              }, function(error) {
+                console.log("Error upgrading anonymous account", error);
+              });
+            }).catch((error) => {
+              console.log(error)
+              // error.code
+              // error.description
+            });
+          }}
+          />
+          <Button 
+            text="Twitter Unlink"
+            onPress={()=>{
+              console.log(firebase.auth().currentUser)
+              firebase.auth().currentUser.unlink("twitter.com").then(()=>{
+
+              }).catch((error)=>{
+                console.log(error)
+              })
+            }}
           />
         </KeyboardAvoidingView>
       </ScrollView>
