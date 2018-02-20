@@ -4,11 +4,13 @@ import Immutable from 'seamless-immutable'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
+  // for local : deprecated
   addTodo: ['todo'],
   deleteTodo: ['index'],
   changeTodo: ['index', 'diff'],
   changeOrder: ['from', 'to'],
 
+  // for cloud
   addTodoList: ['todo'],
   mergeTodoList: ['todos'],
   fetchTodoList: [],
@@ -21,6 +23,7 @@ const { Types, Creators } = createActions({
   deleteTask: ['todoId', 'taskId'],
   changeTask:['todoId', 'taskId', 'diff'],
 
+  // sync
   startSyncTask:['todoId'],
   stopSyncTask:['todoId'],
 })
@@ -31,8 +34,10 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
+  // for local : deprecated
   todos:[{}], // [{title:"first task"},{title:"second task"}]
 
+  // for cloud
   todoLists: {},
   tasks:{},
   taskIds:[],
