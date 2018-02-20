@@ -43,7 +43,7 @@ class TaskCell extends Component {
               }}
             />
           </View>
-          <Button
+          {/* <Button
               text=""
               iconRight
               icon={<Icon name='bars' type="font-awesome" color={Colors.snow}/>}
@@ -54,8 +54,7 @@ class TaskCell extends Component {
                 marginRight:Metrics.baseMargin,
                 flex:0.1
               }}
-              // onPress={()=>{this.props.goToTaskScreen(this.props.id, this.props.todo)}}
-              />
+              /> */}
          </View>
       </Swipeout>
     )
