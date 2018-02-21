@@ -27,40 +27,34 @@ Simple ToDo apps.
 
 **Step 4:** Activate service on Firebase Console (ex:Auth)
 
-## How to Run App
+* Firestore
+* Auth
+  * Annonymous
+  * Twitter
 
-1. cd to the repo
-2. Run Build for either OS
-  * for iOS
-    * run `cd ios && pod install && cd ../`
-    * run `react-native run-ios`
-  * for Android
-    * Run Genymotion
-    * run `react-native run-android`
-
-## Secrets (not yet used)
+## Secrets
 
 This project uses [react-native-config](https://github.com/luggit/react-native-config) to expose config variables to your javascript code in React Native. You can store API keys
 and other sensitive information in a `.env` file:
 
 ```
-API_URL=https://myapi.com
-GOOGLE_MAPS_API_KEY=abcdefgh
-```
-
-and access them from React Native like so:
-
-```
-import Secrets from 'react-native-config'
-
-Secrets.API_URL  // 'https://myapi.com'
-Secrets.GOOGLE_MAPS_API_KEY  // 'abcdefgh'
+TWITTER_CONSUMER_KEY=your consumer key
+TWITTER_CONSUMER_SECRET=your consumer secret
 ```
 
 The `.env` file is ignored by git keeping those secrets out of your repo.
 
 ### Get started:
 1. Copy .env.example to .env
-2. Add your config variables
-3. Follow instructions at [https://github.com/luggit/react-native-config#setup](https://github.com/luggit/react-native-config#setup)
-4. Done!
+2. Add your config variables (You need create [Twitter app](https://apps.twitter.com))
+3. Done!
+
+## How to Run App
+
+* Run Build for either OS
+  * for iOS
+    * run `cd ios && pod install && cd ../` or `npm run ios:pod:install`
+    * run `react-native run-ios`
+  * for Android
+    * Run Genymotion
+    * run `react-native run-android`
