@@ -11,7 +11,7 @@ const { Types, Creators } = createActions({
   changeOrder: ['from', 'to'],
 
   // for cloud
-  addTodoList: ['todo'],
+  addTodoList: ['todo', 'isShare'],
   mergeTodoList: ['todos'],
   fetchTodoList: ['isReload'],
   deleteTodoList: ['id'],
@@ -24,6 +24,7 @@ const { Types, Creators } = createActions({
   changeTask:['todoId', 'taskId', 'diff'],
 
   // sync
+  fetchSyncTodoList:['isReload'],
   startSyncTask:['todoId'],
   stopSyncTask:['todoId'],
 })
@@ -156,6 +157,11 @@ export const startSyncTask = (state, {todoId}) =>{
   return state.merge({tasks:{}, taskIds:[]})
 }
 
+export const fetchSyncTodoList = (state, {isReload}) =>{
+  if (isReload) state = state.merge({todoLists:{}})
+  return state.merge({fetching:true})
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -174,4 +180,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DELETE_TASK]: deleteTask,
 
   [Types.START_SYNC_TASK]:startSyncTask,
+  [Types.FETCH_SYNC_TODO_LIST]:fetchSyncTodoList,
 })

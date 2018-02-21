@@ -21,12 +21,15 @@ const todoCollection = "test"
 const taskCollection = 'task'
 
 export function * addTodoList (action) {
-  const { todo } = action
+  const { todo, isShare } = action
   const user = yield select(UserSelectors.getUser)
   const collection = firebase.firestore().collection(todoCollection)
-  const docRef = yield call([collection, collection.add], {
-    userId: user.uid,
-  })
+  var mergeUser = isShare 
+    ? {userId: user.uid, sharedUsers:{[user.uid]:true}} 
+    : {userId: user.uid, sharedUsers:null}
+  const docRef = yield call([collection, collection.add], 
+    Object.assign(todo,mergeUser)
+  )
   const doc = yield call([docRef, docRef.get])
   const newTodo = Object.assign(doc.data(),{id:doc.id})
   yield put(TodoActions.mergeTodoList([newTodo]))
@@ -34,7 +37,19 @@ export function * addTodoList (action) {
 
 export function * fetchTodoList (action){
   const user = yield select(UserSelectors.getUser)
-  const collection = firebase.firestore().collection(todoCollection).where("userId", "==", user.uid)
+  const collection = firebase.firestore().collection(todoCollection)
+    .where("userId", "==", user.uid).where("sharedUsers", "==", null)
+  const querySnap = yield call([collection, collection.get])
+  const todoList = querySnap.docs.map(doc=>{
+    return Object.assign(doc.data(),{id:doc.id})
+  })
+  yield put(TodoActions.mergeTodoList(todoList))
+}
+
+export function * fetchSyncTodoList (action){
+  const user = yield select(UserSelectors.getUser)
+  const collection = firebase.firestore().collection(todoCollection)
+    .where("sharedUsers."+user.uid, "==", true)
   const querySnap = yield call([collection, collection.get])
   const todoList = querySnap.docs.map(doc=>{
     return Object.assign(doc.data(),{id:doc.id})

@@ -1,6 +1,5 @@
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
 import LoginScreen from '../Containers/LoginScreen'
-import ShareTaskScreen from '../Containers/ShareTaskScreen'
 import TaskScreen from '../Containers/TaskScreen'
 import TodoScreen from '../Containers/TodoScreen'
 import UserScreen from '../Containers/UserScreen'
@@ -40,9 +39,11 @@ const TodoNav = StackNavigator({
 })
 
 const ShareNav = StackNavigator({
-    ShareTaskScreen: { screen: ShareTaskScreen },
+    TaskScreen: { screen: TaskScreen },
+    TodoScreen: { screen: TodoScreen },
   },{
-    initialRouteName: 'ShareTaskScreen',
+    initialRouteName: 'TodoScreen',
+    initialRouteParams:{isShare:true},
     navigationOptions: {
       headerStyle: styles.header,
       headerTintColor: Colors.snow,

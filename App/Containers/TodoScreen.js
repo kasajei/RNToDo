@@ -60,7 +60,8 @@ class ToDoCell extends Component {
 
 class TodoScreen extends Component {
   static navigationOptions =  ({ navigation }) => {
-    var title = "Todo Lists"
+    const { params = {} } = navigation.state
+    var title = params.isShare ? "Share Lists" : "Todo Lists"
     return {
       title: title,
       headerRight: 
@@ -72,7 +73,7 @@ class TodoScreen extends Component {
           icon={<Icon name='plus' type="font-awesome" color={Colors.fire}/>}
           onPress={
             ()=>{
-              navigation.state.params.addTodoList({})
+              navigation.state.params.addTodoList({}, params.isShare)
             }
           }
         />,
@@ -92,7 +93,7 @@ class TodoScreen extends Component {
         />,
       drawerLabel: title,
       drawerIcon: ({ tintColor }) => (
-      <Icon name='cloud' type="font-awesome" color={tintColor}/>
+      <Icon name={params.isShare ?'users':'cloud'} type="font-awesome" color={tintColor}/>
       ),
       drawerLockMode:"unlocked",
     }
@@ -100,13 +101,18 @@ class TodoScreen extends Component {
 
   componentWillMount(){
     this.props.navigation.setParams({
-      addTodoList:this.props.addTodoList
+      addTodoList:this.props.addTodoList,
+      user:this.props.user, 
     })
-    this.props.fetchTodoList(true)
+    const {params = {}} = this.props.navigation.state
+    params.isShare 
+      ? this.props.fetchSyncTodoList(true) 
+      : this.props.fetchTodoList(true)
+    this.params = params
   }
 
   goToTaskScreen(id, todo){
-    this.props.navigation.navigate("TaskScreen", {todoId:id, todo:todo})
+    this.props.navigation.navigate("TaskScreen", Object.assign(this.props.navigation.state.params,{todoId:id, todo:todo}))
   }
 
   
@@ -114,11 +120,7 @@ class TodoScreen extends Component {
     return (
       <View style={styles.container}>
         <SortableListView
-          // moveOnPressIn = {true}
           data={this.props.todoLists}
-          // onRowMoved={e => {
-          //   this.props.changeOrder(e.from, e.to)
-          // }}
           renderRow={(row, section, index) => {
             return (
               <ToDoCell 
@@ -129,13 +131,16 @@ class TodoScreen extends Component {
                 goToTaskScreen={this.goToTaskScreen.bind(this)}
               />
             )}}
-          // renderFooter={this.renderFooter.bind(this)}
           ListViewComponent={KeyboardAwareListView}
           extraScrollHeight={44}
           refreshControl={
             <RefreshControl
               refreshing={this.props.fetching}
-              onRefresh={()=>{this.props.fetchTodoList(false)}}
+              onRefresh={()=>{
+                this.params.isShare 
+                ? this.props.fetchSyncTodoList(false) 
+                : this.props.fetchTodoList(false)
+              }}
             />
           }
         />
@@ -154,8 +159,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addTodoList: (todo) => dispatch(TodoActions.addTodoList(todo)),
+    addTodoList: (todo, isShare) => dispatch(TodoActions.addTodoList(todo, isShare)),
     fetchTodoList: (isReload) => dispatch(TodoActions.fetchTodoList(isReload)),
+    fetchSyncTodoList: (isReload) => dispatch(TodoActions.fetchSyncTodoList(isReload)),
     changeTodoList:(id, diff) => dispatch(TodoActions.changeTodoList(id, diff)),
     deleteTodoList:(id) => dispatch(TodoActions.deleteTodoList(id)),
   }

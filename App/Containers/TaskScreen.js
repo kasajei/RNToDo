@@ -85,7 +85,11 @@ class TaskScreen extends Component {
     this.props.navigation.setParams({
       addTask:this.props.addTask
     })
-    this.props.fetchTask(this.props.navigation.state.params.todoId, true)
+    const {params = {}} = this.props.navigation.state
+    params.isShare
+      ? this.props.startSyncTask(params.todoId)
+      : this.props.fetchTask(params.todoId, true)
+    this.params = params
   }
   render () {
     return (
@@ -97,19 +101,19 @@ class TaskScreen extends Component {
           onRowMoved={e => {
             if(e.to == 0){ // firest
               this.props.changeTask(
-                this.props.navigation.state.params.todoId,
+                this.params.todoId,
                 this.props.taskIds[e.from],
                 {order: this.props.tasks[this.props.taskIds[0]].order/2}  
               )
             }else if (e.to == this.props.taskIds.length -1){ // last
               this.props.changeTask(
-                this.props.navigation.state.params.todoId,
+                this.params.todoId,
                 this.props.taskIds[e.from],
                 {order: this.props.tasks[this.props.taskIds[e.to]].order+1}  
               )
             }else{
               this.props.changeTask(
-                this.props.navigation.state.params.todoId,
+                this.params.todoId,
                 this.props.taskIds[e.from],
                 {order: (this.props.tasks[this.props.taskIds[(e.to>e.from)?(e.to+1):(e.to-1)]].order+this.props.tasks[this.props.taskIds[e.to]].order)/2}  
               )
@@ -119,7 +123,7 @@ class TaskScreen extends Component {
             return (
               <TaskCell 
                 task={row} 
-                todoId={this.props.navigation.state.params.todoId}
+                todoId={this.params.todoId}
                 taskId={index}
                 changeTask={this.props.changeTask}
                 deleteTask={this.props.deleteTask}
@@ -131,7 +135,7 @@ class TaskScreen extends Component {
           refreshControl={
             <RefreshControl
               refreshing={this.props.fetching}
-              onRefresh={()=>{this.props.fetchTask(this.props.navigation.state.params.todoId,false)}}
+              onRefresh={()=>{!this.params.isShare && this.props.fetchTask(this.params.todoId,false)}}
             />
           }
         />
@@ -153,6 +157,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addTask:(todoId, task)=>dispatch(TodoActions.addTask(todoId, task)),
     fetchTask:(todoId, isReload) => dispatch(TodoActions.fetchTask(todoId, isReload)),
+    startSyncTask: (todoId) => dispatch(TodoActions.startSyncTask(todoId)),
     changeTask:(todoId, taskId, diff) => dispatch(TodoActions.changeTask(todoId, taskId, diff)),
     deleteTask:(todoId, taskId) => dispatch(TodoActions.deleteTask(todoId, taskId)),
   }
