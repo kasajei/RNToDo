@@ -13,7 +13,7 @@ const { Types, Creators } = createActions({
   // for cloud
   addTodoList: ['todo'],
   mergeTodoList: ['todos'],
-  fetchTodoList: [],
+  fetchTodoList: ['isReload'],
   deleteTodoList: ['id'],
   changeTodoList: ['id', 'diff'],
 
@@ -90,7 +90,8 @@ export const changeOrder = (state , {from, to}) => {
   ]})
 }
 
-export const fetchTodoList = (state) =>{
+export const fetchTodoList = (state, {isReload}) =>{
+  if (isReload) state = state.merge({todoLists:{}})
   return state.merge({fetching:true})
 }
 

@@ -5,23 +5,30 @@ import Immutable from 'seamless-immutable'
 
 const { Types, Creators } = createActions({
   signInAnonymous:[],
+  loginTwitter:[], // switch user
+  linkToTwitter:[], // link twitter account to current user
+  unlink:["providerId"], // ex: twtter.com, facebook.com
+  logout:[],
+  updateEmail:["email"],
+
   updateProfile: ['user'],
   uploadProfilePhoto: ['user'],
   userSuccess: ['user'],
-  userFailure: null
+  userFailure: null,
+  userLogout: [],
 })
 
 export const UserTypes = Types
 export default Creators
 
 /* ------------- Initial State ------------- */
-
+const defaultUser = {
+  uid:null,
+  displayName:null,
+  photoURL:null,
+}
 export const INITIAL_STATE = Immutable({
-  user: {
-    uid:null,
-    displayName:null,
-    photoURL:null,
-  },
+  user: defaultUser,
   fetching: null,
   error: null
 })
@@ -33,10 +40,6 @@ export const UserSelectors = {
 }
 
 /* ------------- Reducers ------------- */
-export const signInAnonymous = (state) =>{
-  return state
-}
-
 export const updateProfile = (state, {user}) =>{
   return state.merge({fetching:true})
 }
@@ -60,12 +63,16 @@ export const userSuccess = (state, action) => {
 export const userFailure = state =>
   state.merge({ fetching: false, error: true})
 
+export const userLogout = state =>{
+  return state.merge({user:defaultUser})
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.SIGN_IN_ANONYMOUS]: signInAnonymous,
   [Types.UPDATE_PROFILE]: updateProfile,
   [Types.UPLOAD_PROFILE_PHOTO]: uploadProfilePhoto,
   [Types.USER_SUCCESS]: userSuccess,
-  [Types.USER_FAILURE]: userFailure
+  [Types.USER_FAILURE]: userFailure,
+  [Types.USER_LOGOUT]: userLogout,
 })

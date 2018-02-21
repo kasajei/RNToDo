@@ -10,7 +10,8 @@ import { UserTypes } from '../Redux/UserRedux'
 
 /* ------------- Sagas ------------- */
 
-import {updateProfile, uploadProfilePhoto, signInAnonymous} from './UserSagas'
+import {signInAnonymous, loginTwitter, linkToTwitter, unlink, logout, updateEmail} from './UserSagas'
+import {updateProfile, uploadProfilePhoto} from './UserSagas'
 import {addTodoList, fetchTodoList, changeTodoList, deleteTodoList} from  './TodoSagas'
 import {addTask, fetchTask, changeTask, deleteTask} from  './TodoSagas'
 import {startSyncTask, stopSyncTask, watchProccess} from './TodoSagas'
@@ -24,6 +25,12 @@ import {startSyncTask, stopSyncTask, watchProccess} from './TodoSagas'
 export default function * root () {
   yield all([
     takeLatest(UserTypes.SIGN_IN_ANONYMOUS, signInAnonymous),
+    takeLatest(UserTypes.LOGIN_TWITTER, loginTwitter),
+    takeLatest(UserTypes.LINK_TO_TWITTER, linkToTwitter),
+    takeLatest(UserTypes.UNLINK, unlink),
+    takeLatest(UserTypes.LOGOUT, logout),
+    takeLatest(UserTypes.UPDATE_EMAIL, updateEmail),
+
     takeLatest(UserTypes.UPDATE_PROFILE, updateProfile),
     takeLatest(UserTypes.UPLOAD_PROFILE_PHOTO, uploadProfilePhoto),
 

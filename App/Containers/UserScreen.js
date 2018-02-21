@@ -81,83 +81,31 @@ class UserScreen extends Component {
               }}
             />       
         <Button
-          text= "Twitter SignUp"
+          text= "Twitter Link"
           loading={this.props.fetching}
           onPress={()=>{
-            twitter({
-              appId: Config.TWITTER_CONSUMER_KEY,
-              appSecret: Config.TWITTER_CONSUMER_SECRET,
-              callback:"RNTodo://authorize"
-            }).then((info) => {
-              console.log(info)
-              // info.user - user details from the provider
-              // info.credentials - tokens from the provider
-
-              // create a new firebase credential with the token
-              const credential = firebase.auth.TwitterAuthProvider.credential(
-                info.credentials.oauth_token,
-                info.credentials.oauth_token_secret
-              );
-              // login with credential
-              // const currentUser = await firebase.auth().signInWithCredential(credential);
-
-              // link to current user
-              firebase.auth().currentUser.linkWithCredential(credential).then(function(user) {
-                console.log("Anonymous account successfully upgraded", user);
-              }, function(error) {
-                console.log("Error upgrading anonymous account", error);
-              });
-            }).catch((error) => {
-              console.log(error)
-              // error.code
-              // error.description
-            });
+            this.props.linkToTwitter()
           }}
           />
-          <Button 
+          {/* <Button 
             text="Twitter Login"
             onPress={()=>{
-              twitter({
-                appId: Config.TWITTER_CONSUMER_KEY,
-                appSecret: Config.TWITTER_CONSUMER_SECRET,
-                callback:"RNTodo://authorize"
-              }).then((info) => {
-                console.log(info)
-                // info.user - user details from the provider
-                // info.credentials - tokens from the provider
-  
-                // create a new firebase credential with the token
-                const credential = firebase.auth.TwitterAuthProvider.credential(
-                  info.credentials.oauth_token,
-                  info.credentials.oauth_token_secret
-                );
-                // login with credential
-                // const currentUser = await firebase.auth().signInWithCredential(credential);
-  
-                // link to current user
-                firebase.auth().signInAndRetrieveDataWithCredential(credential).then((data)=>{
-                  console.log(data)
-                }).catch((error)=>{
-                  console.log(error)
-                })
-              }).catch((error) => {
-                console.log(error)
-                // error.code
-                // error.description
-              });
+              this.props.loginTwitter()
             }}
-          />
+          /> */}
           <Button 
             text="Twitter Unlink"
             onPress={()=>{
               console.log(firebase.auth().currentUser)
-              firebase.auth().currentUser.unlink("twitter.com").then(()=>{
-
-              }).catch((error)=>{
-                console.log(error)
-              })
+              this.props.unlink("twitter.com")
+              this.props.updateEmail("example+"+this.props.user.uid+"@gmail.com")
             }}
           />
+          <Button
+            text="Log out"
+            onPress={()=>{
+              this.props.logout()
+            }}/>
         </KeyboardAvoidingView>
       </ScrollView>
     )
@@ -174,6 +122,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    loginTwitter: () => dispatch(UserActions.loginTwitter()),
+    linkToTwitter:() => dispatch(UserActions.linkToTwitter()),
+    unlink:(providerId) => dispatch(UserActions.unlink(providerId)),
+    logout:() => dispatch(UserActions.logout()),
+    updateEmail:(email) => dispatch(UserActions.updateEmail(email)),
     updateProfile: (user) => dispatch(UserActions.updateProfile(user)),
     uploadProfilePhoto: (user) => dispatch(UserActions.uploadProfilePhoto(user)),
     failure:() => dispatch(UserActions.userFailure()),

@@ -6,16 +6,19 @@ import ReduxPersist from '../Config/ReduxPersist'
 import UserActions from '../Redux/UserRedux'
 // Styles
 import styles from './Styles/RootContainerStyles'
+import LoginScreen from '../Containers/LoginScreen'
+
 
 class RootContainer extends Component {
-  componentWillMount(){
-    this.props.signInAnonymous()
-  }
   render () {
+    var component = <LoginScreen />
+    if (this.props.user && this.props.user.uid){
+      component = <ReduxNavigation />
+    }
     return (
       <View style={styles.applicationView}>
         <StatusBar barStyle='light-content' />
-        {this.props.user && this.props.user.uid && <ReduxNavigation />}
+        {component}
       </View>
     )
   }
@@ -29,7 +32,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  signInAnonymous:()=> dispatch(UserActions.signInAnonymous()),
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RootContainer)

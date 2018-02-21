@@ -102,7 +102,7 @@ class TodoScreen extends Component {
     this.props.navigation.setParams({
       addTodoList:this.props.addTodoList
     })
-    this.props.fetchTodoList()
+    this.props.fetchTodoList(true)
   }
 
   goToTaskScreen(id, todo){
@@ -135,7 +135,7 @@ class TodoScreen extends Component {
           refreshControl={
             <RefreshControl
               refreshing={this.props.fetching}
-              onRefresh={this.props.fetchTodoList}
+              onRefresh={()=>{this.props.fetchTodoList(false)}}
             />
           }
         />
@@ -155,7 +155,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addTodoList: (todo) => dispatch(TodoActions.addTodoList(todo)),
-    fetchTodoList: () => dispatch(TodoActions.fetchTodoList()),
+    fetchTodoList: (isReload) => dispatch(TodoActions.fetchTodoList(isReload)),
     changeTodoList:(id, diff) => dispatch(TodoActions.changeTodoList(id, diff)),
     deleteTodoList:(id) => dispatch(TodoActions.deleteTodoList(id)),
   }

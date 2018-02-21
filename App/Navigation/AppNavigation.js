@@ -1,4 +1,5 @@
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
+import LoginScreen from '../Containers/LoginScreen'
 import ShareTaskScreen from '../Containers/ShareTaskScreen'
 import TaskScreen from '../Containers/TaskScreen'
 import TodoScreen from '../Containers/TodoScreen'
@@ -9,6 +10,7 @@ import styles from './Styles/NavigationStyles'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
+  LoginScreen: { screen: LoginScreen },
   LaunchScreen: { screen: LaunchScreen }
 }, {
   // Default config for all screens
