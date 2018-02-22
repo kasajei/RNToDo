@@ -119,7 +119,7 @@ class TodoScreen extends Component {
     return(
       <View>
         <View  style={styles.groupAroundContainer}>
-        <Input
+        {this.params.isShare && <Input
               returnKeyType="done"
               inputStyle={{color:Colors.snow}}
               placeholder={'Share ID Here'}
@@ -128,7 +128,7 @@ class TodoScreen extends Component {
                 const text = event.nativeEvent.text
                 this.props.subscribeTodo(text)
               }}
-            />
+            />}
         </View>
       </View>
     )

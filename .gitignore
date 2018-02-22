@@ -57,3 +57,4 @@ buck-out/
 .env
 /ios/Pods
 /ios/RNToDo/GoogleService-Info.plist
+/firestore/.firebaserc

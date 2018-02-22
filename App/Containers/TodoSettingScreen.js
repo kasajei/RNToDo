@@ -52,7 +52,7 @@ class TodoSettingScreen extends Component {
         </View>
           {Object.keys(todo.sharedUsers).map((value,index)=>{
             return (
-              <View style={styles.groupAroundContainer}>
+              <View style={styles.groupAroundContainer} key={value}>
                 <Text style={styles.subtitle} key={value}>{index+1}. {value}</Text>
               </View>
             )
