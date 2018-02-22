@@ -1,4 +1,5 @@
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
+import TodoSettingScreen from '../Containers/TodoSettingScreen'
 import LoginScreen from '../Containers/LoginScreen'
 import TaskScreen from '../Containers/TaskScreen'
 import TodoScreen from '../Containers/TodoScreen'
@@ -24,6 +25,7 @@ const PrimaryNav = StackNavigator({
 })
 
 const TodoNav = StackNavigator({
+  TodoSettingScreen: { screen: TodoSettingScreen },
   TaskScreen: { screen: TaskScreen },
   TodoScreen: { screen: TodoScreen },
 }, {
@@ -39,6 +41,7 @@ const TodoNav = StackNavigator({
 })
 
 const ShareNav = StackNavigator({
+    TodoSettingScreen: { screen: TodoSettingScreen },
     TaskScreen: { screen: TaskScreen },
     TodoScreen: { screen: TodoScreen },
   },{
@@ -74,7 +77,7 @@ const MyApp = DrawerNavigator({
   ShareNav: {screen:ShareNav},
   PrimaryNav: { screen: PrimaryNav,},
 },{
-  initialRouteName: 'UserNav',
+  initialRouteName: 'ShareNav',
   drawerBackgroundColor:Colors.drawer,
   contentOptions: {
     activeTintColor: Colors.background,

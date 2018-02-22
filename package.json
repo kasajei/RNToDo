@@ -35,6 +35,7 @@
     "ramda": "^0.25.0",
     "react": "16.2.0",
     "react-native": "0.53.0",
+    "react-native-action-button": "^2.8.4",
     "react-native-config": "^0.11.5",
     "react-native-elements": "^1.0.0-beta2",
     "react-native-firebase": "^3.2.5",

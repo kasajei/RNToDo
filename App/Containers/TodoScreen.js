@@ -115,6 +115,24 @@ class TodoScreen extends Component {
     this.props.navigation.navigate("TaskScreen", Object.assign(this.props.navigation.state.params,{todoId:id, todo:todo}))
   }
 
+  renderFooter(){
+    return(
+      <View>
+        <View  style={styles.groupAroundContainer}>
+        <Input
+              returnKeyType="done"
+              inputStyle={{color:Colors.snow}}
+              placeholder={'Share ID Here'}
+              placeholderTextColor={Colors.charcoal} 
+              onSubmitEditing={(event) => {
+                const text = event.nativeEvent.text
+                this.props.subscribeTodo(text)
+              }}
+            />
+        </View>
+      </View>
+    )
+  }
   
   render () {
     return (
@@ -131,18 +149,19 @@ class TodoScreen extends Component {
                 goToTaskScreen={this.goToTaskScreen.bind(this)}
               />
             )}}
-          ListViewComponent={KeyboardAwareListView}
-          extraScrollHeight={44}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.props.fetching}
-              onRefresh={()=>{
-                this.params.isShare 
-                ? this.props.fetchSyncTodoList(false) 
-                : this.props.fetchTodoList(false)
-              }}
-            />
-          }
+            renderFooter={this.renderFooter.bind(this)}
+            ListViewComponent={KeyboardAwareListView}
+            extraScrollHeight={44}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.fetching}
+                onRefresh={()=>{
+                  this.params.isShare 
+                  ? this.props.fetchSyncTodoList(true) 
+                  : this.props.fetchTodoList(true)
+                }}
+              />
+            }
         />
       </View>
     )
@@ -164,6 +183,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchSyncTodoList: (isReload) => dispatch(TodoActions.fetchSyncTodoList(isReload)),
     changeTodoList:(id, diff) => dispatch(TodoActions.changeTodoList(id, diff)),
     deleteTodoList:(id) => dispatch(TodoActions.deleteTodoList(id)),
+    subscribeTodo:(shareId) => dispatch(TodoActions.subscribeTodo(shareId)),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TodoScreen)

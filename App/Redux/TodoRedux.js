@@ -27,6 +27,9 @@ const { Types, Creators } = createActions({
   fetchSyncTodoList:['isReload'],
   startSyncTask:['todoId'],
   stopSyncTask:['todoId'],
+
+  // share
+  subscribeTodo:['shareId'],
 })
 
 export const TodoTypes = Types

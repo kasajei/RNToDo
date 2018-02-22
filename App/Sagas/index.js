@@ -14,7 +14,7 @@ import {signInAnonymous, loginTwitter, linkToTwitter, unlink, logout, updateEmai
 import {updateProfile, uploadProfilePhoto} from './UserSagas'
 import {addTodoList, fetchTodoList, changeTodoList, deleteTodoList} from  './TodoSagas'
 import {addTask, fetchTask, changeTask, deleteTask} from  './TodoSagas'
-import {fetchSyncTodoList, watchProccess} from './TodoSagas'
+import {fetchSyncTodoList, watchProccess, subscribeTodo} from './TodoSagas'
 
 /* ------------- API ------------- */
 
@@ -46,5 +46,7 @@ export default function * root () {
 
     takeEvery(TodoTypes.FETCH_SYNC_TODO_LIST, fetchSyncTodoList),
     fork(watchProccess),
+
+    takeLatest(TodoTypes.SUBSCRIBE_TODO, subscribeTodo),
   ])
 }

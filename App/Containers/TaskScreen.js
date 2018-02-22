@@ -7,7 +7,7 @@ import { Images, Colors, Metrics} from '../Themes'
 import Swipeout from 'react-native-swipeout'
 import TodoActions from '../Redux/TodoRedux'
 import { KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
-
+import ActionButton from 'react-native-action-button';
 
 // Styles
 import styles from './Styles/TaskScreenStyle'
@@ -72,10 +72,10 @@ class TaskScreen extends Component {
           buttonStyle={{
             backgroundColor:Colors.transparent
           }}
-          icon={<Icon name='plus' type="font-awesome" color={Colors.fire}/>}
+          icon={<Icon name='cog' type="font-awesome" color={Colors.snow}/>}
           onPress={
             ()=>{
-              navigation.state.params.addTask(params.todoId, {})
+              navigation.navigate("TodoSettingScreen", params)
             }
           }
         />
@@ -135,9 +135,13 @@ class TaskScreen extends Component {
           refreshControl={
             <RefreshControl
               refreshing={this.props.fetching}
-              onRefresh={()=>{!this.params.isShare && this.props.fetchTask(this.params.todoId,false)}}
+              onRefresh={()=>{!this.params.isShare && this.props.fetchTask(this.params.todoId,true)}}
             />
           }
+        />
+        <ActionButton
+          buttonColor="rgba(231,76,60,1)"
+          onPress={() => { this.props.addTask(this.params.todoId,{})}}
         />
       </View>
     )

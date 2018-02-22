@@ -162,7 +162,7 @@ export function *syncTask (action){
       },[])
       yield all(deleteTaskIds.map(
         deleteTaskId => put(TodoActions.deleteTask(todoId, deleteTaskId))
-      ));
+      ))
     }
   }finally {
     if (yield cancelled()) {
@@ -195,4 +195,21 @@ export function *watchProccess(){
   let subscribers = {}
   yield fork(startSyncTask, subscribers)
   yield fork(stopSyncTask, subscribers)
+}
+
+export function *subscribeTodo(action){
+  const {shareId} = action
+  const user = yield select(UserSelectors.getUser)
+
+  const collection = firebase.firestore().collection(todoCollection)
+    .where("shareId", "==", shareId)
+  const querySnap = yield call([collection, collection.get])
+  
+  var key = "sharedUsers."+user.uid
+  const diff = {[key]: true}
+  const todoList = querySnap.docs.map(doc=>{
+    doc.ref.update(diff)
+    return Object.assign(doc.data(),{id:doc.id}, {sharedUsers:Object.assign(doc.data().sharedUsers,{[user.uid]:true})})
+  })
+  yield put(TodoActions.mergeTodoList(todoList))
 }
