@@ -58,3 +58,5 @@ buck-out/
 /ios/Pods
 /ios/RNToDo/GoogleService-Info.plist
 /firestore/.firebaserc
+/functions/.firebaserc
+/functions/functions/firebase-debug.log

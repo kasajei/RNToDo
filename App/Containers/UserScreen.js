@@ -87,12 +87,7 @@ class UserScreen extends Component {
             this.props.linkToTwitter()
           }}
           />
-          {/* <Button 
-            text="Twitter Login"
-            onPress={()=>{
-              this.props.loginTwitter()
-            }}
-          /> */}
+          
           <Button 
             text="Twitter Unlink"
             onPress={()=>{
@@ -106,6 +101,14 @@ class UserScreen extends Component {
             onPress={()=>{
               this.props.logout()
             }}/>
+            <Button 
+            text="getToken"
+            onPress={()=>{
+              firebase.auth().currentUser.getIdToken().then((tokenId)=>{
+                console.log(tokenId)
+              })
+            }}
+          />
         </KeyboardAvoidingView>
       </ScrollView>
     )

@@ -32,6 +32,12 @@ Simple ToDo apps.
   * Annonymous
   * Twitter
 
+## Firebase (for firestore / functions)
+
+1. Copy .firebaserc.example to .firebaserc
+2. Configure your firebase's product id 
+3. First `firebase login`
+
 ## Secrets
 
 This project uses [react-native-config](https://github.com/luggit/react-native-config) to expose config variables to your javascript code in React Native. You can store API keys
