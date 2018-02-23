@@ -24,7 +24,9 @@ app.use((req, res, next) => {
     return admin.auth().verifyIdToken(jwt).then((claims) => {
         req.user = claims // gives us a user object to use below
         next()
+        return Promise.resolve()
     }).catch((err) => {
+        console.log(err)
         return res.status(400).json({
         message: 'invalid jwt'
         })
@@ -55,19 +57,23 @@ app.post('/todo/shareId', (req, res) => {
     })
     .then(() => tx.get(targetTodoRef).then((doc)=>{
       console.log(doc.data())
-      if(userId && doc.data().userId != userId){
+      if(userId && doc.data().userId !== userId){
         var err =  new Error("You are not a owner.")
         err.name = "NOT_OWNER"
         throw err
       }
       return Promise.resolve()
     }))
-    .then(() => tx.update(targetTodoRef, {shareId: shareId}))
+    .then(() => {
+      tx.update(targetTodoRef, {shareId: shareId})
+      return Promise.resolve()
+    })
   }).then(() => {
     res.json({
       shareId: shareId, // return the formatted username
       message: 'successfully setting shareId'
     })
+    return Promise.resolve()
   }).catch((err) => {
     console.log(err.name, err.message)
     return res.status(err.message.status || 500).json({name:err.name, message:err.message})

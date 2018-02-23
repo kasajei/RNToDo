@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 
 // our "constructor"
-const create = (baseURL = 'https://api.github.com/') => {
+const create = (baseURL) => {
   // ------
   // STEP 1
   // ------
@@ -34,9 +34,13 @@ const create = (baseURL = 'https://api.github.com/') => {
   // Since we can't hide from that, we embrace it by getting out of the
   // way at this level.
   //
-  const getRoot = () => api.get('')
-  const getRate = () => api.get('rate_limit')
-  const getUser = (username) => api.get('search/users', {q: username})
+  // const getRoot = () => api.get('')
+  // const getRate = () => api.get('rate_limit')
+  // const getUser = (username) => api.get('search/users', {q: username})
+
+  const setShareId = (tokenId, todoId, shareId) => api.post(
+    'todo/shareId', {todoId:todoId, shareId: shareId}, {headers: {authorization: tokenId}}
+  )
 
   // ------
   // STEP 3
@@ -52,9 +56,7 @@ const create = (baseURL = 'https://api.github.com/') => {
   //
   return {
     // a list of the API functions from step 2
-    getRoot,
-    getRate,
-    getUser
+    setShareId,
   }
 }
 

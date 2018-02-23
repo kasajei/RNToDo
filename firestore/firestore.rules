@@ -7,27 +7,30 @@ service cloud.firestore {
     //   allow read, write;
     // }
 
-    function isOwner(){
+    function isOwner(resource){
       return request.auth.uid == resource.data.userId
     }
 
-    function isShared(){
+    function isShared(resource){
       return request.auth.uid in resource.data.sharedUsers.keys() || request.auth.uid in request.resource.data.sharedUsers.keys()
     }
 
-    function hasShareId(){
-      return request.resource.data.shareId != null
+    function notAllowModify(){
+      return !'shareId' in request.writeFields; 
     }
 
     match /test/{todoId} {
       allow read, create: if request.auth.uid != null;
-      allow update, delete: if isOwner() || isShared() || hasShareId();
+      allow update, delete: if (isOwner(resource) || isShared(resource)) && notAllowModify();
 
+      function ownTodo(){
+        return request.auth.uid == get(/databases/$(database)/documents/test/$(todoId)).data.userId
+      }
       function accessTask(){
         return request.auth.uid in get(/databases/$(database)/documents/test/$(todoId)).data.sharedUsers.keys()
       }
       match /task/{taskId} {
-        allow read, write: if accessTask();
+        allow read, write: if ownTodo() || accessTask();
       }
     }
 

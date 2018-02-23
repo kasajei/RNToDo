@@ -46,6 +46,7 @@ and other sensitive information in a `.env` file:
 ```
 TWITTER_CONSUMER_KEY=your consumer key
 TWITTER_CONSUMER_SECRET=your consumer secret
+FIREBASE_PROJECT_ID=your firebase project id
 ```
 
 The `.env` file is ignored by git keeping those secrets out of your repo.

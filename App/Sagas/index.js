@@ -1,8 +1,9 @@
-import { takeEvery, takeLatest, all, fork } from 'redux-saga/effects'
+import { takeEvery, takeLatest, all, fork, call } from 'redux-saga/effects'
 import API from '../Services/Api'
 import FixtureAPI from '../Services/FixtureApi'
 import DebugConfig from '../Config/DebugConfig'
-
+import firebase from 'react-native-firebase'
+import Config from 'react-native-config'
 /* ------------- Types ------------- */
 
 import {TodoTypes} from '../Redux/TodoRedux'
@@ -14,19 +15,24 @@ import {signInAnonymous, loginTwitter, linkToTwitter, unlink, logout, updateEmai
 import {updateProfile, uploadProfilePhoto} from './UserSagas'
 import {addTodoList, fetchTodoList, changeTodoList, deleteTodoList} from  './TodoSagas'
 import {addTask, fetchTask, changeTask, deleteTask} from  './TodoSagas'
-import {fetchSyncTodoList, watchProccess, subscribeTodo} from './TodoSagas'
+import {fetchSyncTodoList, watchProccess, setShareId, subscribeTodo} from './TodoSagas'
 
 /* ------------- API ------------- */
 
 // The API we use is only used from Sagas, so we create it here and pass along
 // to the sagas which need it.
-// const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
+const project_id = Config.FIREBASE_PROJECT_ID
+const endpoint = DebugConfig.useLocal 
+  ? `http://localhost:5000/${project_id}/us-central1/api/`
+  : `https://us-central1-${project_id}.cloudfunctions.net/api/`
+const api = API.create(endpoint)
+console.log(endpoint)
 /* ------------- Connect Types To Sagas ------------- */
 
 export default function * root () {
-  yield all([
-    // takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)
-    
+  yield all([    
+    call(firebase.auth), // Why dose this need?
+
     takeLatest(UserTypes.SIGN_IN_ANONYMOUS, signInAnonymous),
     takeLatest(UserTypes.LOGIN_TWITTER, loginTwitter),
     takeLatest(UserTypes.LINK_TO_TWITTER, linkToTwitter),
@@ -51,5 +57,6 @@ export default function * root () {
     fork(watchProccess),
 
     takeLatest(TodoTypes.SUBSCRIBE_TODO, subscribeTodo),
+    takeLatest(TodoTypes.SET_SHARE_ID, setShareId, api),
   ])
 }

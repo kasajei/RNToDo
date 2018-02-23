@@ -44,8 +44,11 @@ class TodoSettingScreen extends Component {
             onSubmitEditing={(event) => {
               const text = event.nativeEvent.text
               if(text != todo.ShareId){
-                // TODO: ShareID must be unique or show select UI
-                this.props.changeTodoList(todo.id, {shareId:text})
+                // shareId don't allow change directly
+                // this.props.changeTodoList(todo.id, {shareId:text})
+
+                // This method check Share ID Uniqu with Function
+                this.props.setShareId(todo.id, text)
               }
             }}
           />
@@ -109,6 +112,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     changeTodoList:(id, diff) => dispatch(TodoActions.changeTodoList(id, diff)),
+    setShareId:(todoId, shareId) => dispatch(TodoActions.setShareId(todoId, shareId)),
   }
 }
 

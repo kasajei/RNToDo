@@ -6,6 +6,7 @@ import { Images, Colors, Metrics} from '../Themes'
 import firebase from 'react-native-firebase'
 import styles from './Styles/UserScreenStyle'
 import UserActions from '../Redux/UserRedux'
+import TodoActions from '../Redux/TodoRedux'
 import ImagePicker from 'react-native-image-picker'
 import Config from 'react-native-config'
 import { twitter } from 'react-native-simple-auth'
@@ -133,6 +134,7 @@ const mapDispatchToProps = (dispatch) => {
     updateProfile: (user) => dispatch(UserActions.updateProfile(user)),
     uploadProfilePhoto: (user) => dispatch(UserActions.uploadProfilePhoto(user)),
     failure:() => dispatch(UserActions.userFailure()),
+    setShareId:(todoId, shareId) => dispatch(TodoActions.setShareId(todoId, shareId)),
   }
 }
 

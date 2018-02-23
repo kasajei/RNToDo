@@ -197,6 +197,26 @@ export function *watchProccess(){
   yield fork(stopSyncTask, subscribers)
 }
 
+export function *setShareId(api, action){
+  const {todoId, shareId} = action
+  const todo = yield select(TodoSelectors.getTodo, todoId)
+
+  const firebaseAuth = yield call(firebase.auth)
+  const tokenId = yield call([firebaseAuth.currentUser, firebaseAuth.currentUser.getIdToken])
+
+  const response = yield call(api.setShareId, tokenId, todoId, shareId)
+  if (response.ok) {
+    console.log(response)
+    const changedTodo = todo.merge({shareId:shareId})
+    yield put(TodoActions.mergeTodoList([changedTodo]))
+  } else {
+    console.log(response)
+    // TODO: Error handler
+    const changedTodo = todo.merge({shareId:response.data.name})
+    yield put(TodoActions.mergeTodoList([changedTodo]))
+  }
+}
+
 export function *subscribeTodo(action){
   const {shareId} = action
   const user = yield select(UserSelectors.getUser)

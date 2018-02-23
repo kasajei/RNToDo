@@ -29,6 +29,7 @@ const { Types, Creators } = createActions({
   stopSyncTask:['todoId'],
 
   // share
+  setShareId:['todoId','shareId'],
   subscribeTodo:['shareId'],
 })
 
