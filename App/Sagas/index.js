@@ -20,10 +20,13 @@ import {fetchSyncTodoList, watchProccess, subscribeTodo} from './TodoSagas'
 
 // The API we use is only used from Sagas, so we create it here and pass along
 // to the sagas which need it.
+// const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
 /* ------------- Connect Types To Sagas ------------- */
 
 export default function * root () {
   yield all([
+    // takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)
+    
     takeLatest(UserTypes.SIGN_IN_ANONYMOUS, signInAnonymous),
     takeLatest(UserTypes.LOGIN_TWITTER, loginTwitter),
     takeLatest(UserTypes.LINK_TO_TWITTER, linkToTwitter),
