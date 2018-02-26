@@ -7,12 +7,12 @@ import UserActions from '../Redux/UserRedux'
 // Styles
 import styles from './Styles/RootContainerStyles'
 import LoginScreen from '../Containers/LoginScreen'
-
+import firebase from 'react-native-firebase'
 
 class RootContainer extends Component {
   render () {
     var component = <LoginScreen />
-    if (this.props.user && this.props.user.uid){
+    if (firebase.auth().currentUser){
       component = <ReduxNavigation />
     }
     return (
