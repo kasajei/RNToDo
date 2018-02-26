@@ -149,6 +149,8 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNReactNativeHapticFeedback (1.0.1):
+    - React
   - RNVectorIcons (4.5.0):
     - React
   - yoga (0.53.0.React)
@@ -169,6 +171,7 @@ DEPENDENCIES:
   - React/BatchedBridge (from `../node_modules/react-native`)
   - React/Core (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
+  - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -179,6 +182,8 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native-config
   react-native-image-picker:
     :path: ../node_modules/react-native-image-picker
+  RNReactNativeHapticFeedback:
+    :path: ../node_modules/react-native-haptic-feedback
   RNVectorIcons:
     :path: ../node_modules/react-native-vector-icons
   yoga:
@@ -211,9 +216,10 @@ SPEC CHECKSUMS:
   React: 988a7dbd5626e0dd4f4b63fb444fa7e3d975e5b7
   react-native-config: 408003951fd9d8b1dfd7ebf535f67c315f44d823
   react-native-image-picker: 42cfe2c8435d893414f8714a81e480313cb1412b
+  RNReactNativeHapticFeedback: 81a9bb493a719cf71b7d4d1cebbd91a124ce5cf5
   RNVectorIcons: c0dbfbf6068fefa240c37b0f71bd03b45dddac44
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: 4468e184967e2c520344b63f18b12d757d234c65
+PODFILE CHECKSUM: c98c58e777314a3e2f79cb1ac69d868fbaf3227d
 
 COCOAPODS: 1.4.0

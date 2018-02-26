@@ -31,6 +31,8 @@ target 'RNToDo' do
   
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'RNReactNativeHapticFeedback', :path => '../node_modules/react-native-haptic-feedback'
+
 end
 
 post_install do |installer|

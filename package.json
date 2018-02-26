@@ -39,6 +39,7 @@
     "react-native-config": "^0.11.5",
     "react-native-elements": "^1.0.0-beta2",
     "react-native-firebase": "^3.2.5",
+    "react-native-haptic-feedback": "git+https://github.com/kasajei/react-native-haptic-feedback.git",
     "react-native-image-picker": "^0.26.7",
     "react-native-keyboard-aware-scroll-view": "^0.4.3",
     "react-native-simple-auth": "^2.3.0",

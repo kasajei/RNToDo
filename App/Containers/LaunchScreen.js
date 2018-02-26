@@ -9,6 +9,7 @@ import TodoActions from '../Redux/TodoRedux'
 import { KeyboardAwareListView } from 'react-native-keyboard-aware-scroll-view'
 import styles from './Styles/LaunchScreenStyles'
 import firebase from 'react-native-firebase'
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 class ToDoCell extends Component {
   render(){
@@ -104,6 +105,16 @@ class LaunchScreen extends Component {
   renderFooter(){
     return(
       <View>
+        {["selection", "impactLight", "impactMedium","impactHeavy","notificationSuccess", "notificationWarning", "notificationError"].map((value)=>{
+          return(<Button 
+            text={value}
+            onPress={
+              ()=>{
+                ReactNativeHapticFeedback.trigger(value);
+              }
+            }
+          />)
+        })}
       </View>
     )
   }
