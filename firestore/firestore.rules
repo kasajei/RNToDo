@@ -33,7 +33,10 @@ service cloud.firestore {
         allow read, write: if ownTodo() || accessTask();
       }
     }
-
+  
+    match /chat/{chatId=**} {
+      allow write, read: if true;
+    }
     
   }
 }
